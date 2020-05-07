@@ -14,58 +14,66 @@ const ll MOD=1e9+7;
 const ll LOG=20;
 
 ll n,m;
-ll mata[MAX+5],matb[MAX+5];
-ll lv[MAX+5];
 vector<ll> adj[MAX+5];
 
-void hop_bfs(){
-    memset(lv,0,sizeof(lv));
-    ll q[MAX+5];
-    ll s=0,e=0;
-    FOR(i,1,n){
-        if(!mata[i]){
-            lv[i]=1;
-            q[e++]=i;
-        }
+struct bimatch{
+    vector<ll> mata,matb,lv;
+    void make(ll n){
+        mata=vector<ll>(n+5,0);
+        matb=vector<ll>(n+5,0);
     }
-    while(s<e){
-        ll top=q[s++];
-        for(ll nxt:adj[top]){
-            nxt=matb[nxt];
-            if(nxt && !lv[nxt]){
-                lv[nxt]=lv[top]+1;
-                q[e++]=nxt;
+    void hop_bfs(){
+        lv=vector<ll>(n+5,0);
+        ll q[MAX+5];
+        ll s=0,e=0;
+        FOR(i,1,n){
+            if(!mata[i]){
+                lv[i]=1;
+                q[e++]=i;
+            }
+        }
+        while(s<e){
+            ll top=q[s++];
+            for(ll nxt:adj[top]){
+                nxt=matb[nxt];
+                if(nxt && !lv[nxt]){
+                    lv[nxt]=lv[top]+1;
+                    q[e++]=nxt;
+                }
             }
         }
     }
-}
-bool hop_dfs(ll idx){
-    for(ll i:adj[idx]){
-        ll nxt=matb[i];
-        if(!nxt || lv[nxt]==lv[idx]+1 && hop_dfs(nxt)){
-            matb[i]=idx;
-            mata[idx]=i;
-            return true;
+    bool hop_dfs(ll idx){
+        for(ll i:adj[idx]){
+            ll nxt=matb[i];
+            if(!nxt || lv[nxt]==lv[idx]+1 && hop_dfs(nxt)){
+                matb[i]=idx;
+                mata[idx]=i;
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
-ll hopcroft(){
-    ll ret=0;
-    while(1){
-        hop_bfs();
-        ll tmp=0;
-        FOR(i,1,n) if(!mata[i] && hop_dfs(i)) ++tmp;
-        if(tmp) ret+=tmp;
-        else break;
+    ll operator()(){
+        ll ret=0;
+        while(1){
+            hop_bfs();
+            ll tmp=0;
+            FOR(i,1,n) if(!mata[i] && hop_dfs(i)) ++tmp;
+            if(tmp) ret+=tmp;
+            else break;
+        }
+        return ret;
     }
-    return ret;
-}
+};
+
+bimatch hopcroft;
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     cin>>n>>m;
+    hopcroft.make(n);
     FOR(i,1,n){
         ll s;
         cin>>s;

@@ -14,73 +14,81 @@ const ll MOD=1e9+7;
 const ll LOG=20;
 
 ll n;
-ll side[MAX+5],work[MAX+5],lv[MAX+5];
 ll cap[MAX+5][MAX+5];
-ll flow[MAX+5][MAX+5];
 
-bool dinic_bfs(){
-    memset(lv,0,sizeof(lv));
-    ll q[MAX+5];
-    ll s=0,e=0;
-    q[e++]=n+1;
-    lv[n+1]=1;
-    while(s<e){
-        ll top=q[s++];
-        FOR(i,1,n+2){
-            if(!lv[i] && flow[top][i]<cap[top][i]){
-                lv[i]=lv[top]+1;
-                q[e++]=i;
+struct maxfl{
+    vector<ll> side,work,lv;
+    ll flow[MAX+5][MAX+5]={};
+    void make(ll n){
+        side=vector<ll>(n+5,0);
+    }
+    bool dinic_bfs(){
+        lv=vector<ll>(n+5,0);
+        ll q[MAX+5];
+        ll s=0,e=0;
+        q[e++]=n+1;
+        lv[n+1]=1;
+        while(s<e){
+            ll top=q[s++];
+            FOR(i,1,n+2){
+                if(!lv[i] && flow[top][i]<cap[top][i]){
+                    lv[i]=lv[top]+1;
+                    q[e++]=i;
+                }
+            }
+        }
+        return lv[n+2];
+    }
+    ll dinic_dfs(ll idx=n+1,ll f=INF){
+        if(idx==n+2) return f;
+        ll ret=0,rest;
+        for(ll& i=work[idx]; i<=n+2; ++i){
+            rest=cap[idx][i]-flow[idx][i];
+            if(lv[i]==lv[idx]+1 && rest && (ret=dinic_dfs(i,min(f,rest)))){
+                flow[idx][i]+=ret;
+                flow[i][idx]-=ret;
+                return ret;
+            }
+        }
+        return 0;
+    }
+    ll operator()(){
+        ll ret=0,d;
+        while(dinic_bfs()){
+            work=vector<ll>(n+5,1);
+            while(d=dinic_dfs()) ret+=d;
+        }
+        return ret;
+    }
+    void cut(){
+        ll q[MAX+5];
+        ll s=0,e=0;
+        q[e++]=n+1;
+        bool visit[MAX+5]={};
+        visit[n+1]=1;
+        while(s<e){
+            ll top=q[s++];
+            FOR(i,1,n+2){
+                if(!visit[i] && flow[top][i]<cap[top][i]){
+                    visit[i]=1;
+                    q[e++]=i;
+                    side[i]=1;
+                }
             }
         }
     }
-    return lv[n+2];
-}
-ll dinic_dfs(ll idx=n+1,ll f=INF){
-    if(idx==n+2) return f;
-    ll ret=0,rest;
-    for(ll& i=work[idx]; i<=n+2; ++i){
-        rest=cap[idx][i]-flow[idx][i];
-        if(lv[i]==lv[idx]+1 && rest && (ret=dinic_dfs(i,min(f,rest)))){
-            flow[idx][i]+=ret;
-            flow[i][idx]-=ret;
-            return ret;
-        }
-    }
-    return 0;
-}
-ll dinic(){
-    ll ret=0,d;
-    while(dinic_bfs()){
-        FOR(i,1,n+2) work[i]=1;
-        while(d=dinic_dfs()) ret+=d;
-    }
-    return ret;
-}
-void bfs(){
-    ll q[MAX+5];
-    ll s=0,e=0;
-    q[e++]=n+1;
-    bool visit[MAX+5]={};
-    visit[n+1]=1;
-    while(s<e){
-        ll top=q[s++];
-        FOR(i,1,n+2){
-            if(!visit[i] && flow[top][i]<cap[top][i]){
-                visit[i]=1;
-                q[e++]=i;
-                side[i]=1;
-            }
-        }
-    }
-}
+};
+
+maxfl dinic;
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     cin>>n;
+    dinic.make(n);
     FOR(i,1,n){
-        cin>>side[i];
-        switch(side[i]){
+        cin>>dinic.side[i];
+        switch(dinic.side[i]){
         case 1:
             cap[n+1][i]=INF;
             break;
@@ -91,10 +99,10 @@ int main(){
     }
     FOR(i,1,n) FOR(j,1,n) cin>>cap[i][j];
     cout<<dinic()<<'\n';
-    bfs();
-    FOR(i,1,n) if(side[i]==1) cout<<i<<' ';
+    dinic.cut();
+    FOR(i,1,n) if(dinic.side[i]==1) cout<<i<<' ';
     cout<<'\n';
-    FOR(i,1,n) if(side[i]!=1) cout<<i<<' ';
+    FOR(i,1,n) if(dinic.side[i]!=1) cout<<i<<' ';
     cout<<'\n';
     return 0;
 }
