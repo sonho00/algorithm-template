@@ -9,7 +9,7 @@ using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
 const ll INF=1e18;
-const ll MAX=1e4;
+const ll MAX=200;
 const ll MOD=1e9+7;
 const ll LOG=20;
 
