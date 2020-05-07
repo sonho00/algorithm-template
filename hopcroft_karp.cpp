@@ -18,9 +18,9 @@ vector<ll> adj[MAX+5];
 
 struct bimat{
     vector<ll> mata,matb,lv;
-    void make(ll n){
+    void make(ll n,ll m){
         mata=vector<ll>(n+5,0);
-        matb=vector<ll>(n+5,0);
+        matb=vector<ll>(m+5,0);
     }
     void hop_bfs(){
         lv=vector<ll>(n+5,0);
@@ -73,7 +73,7 @@ int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     cin>>n>>m;
-    hopcroft.make(n);
+    hopcroft.make(n,m);
     FOR(i,1,n){
         ll s;
         cin>>s;
