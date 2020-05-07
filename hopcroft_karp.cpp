@@ -16,7 +16,7 @@ const ll LOG=20;
 ll n,m;
 vector<ll> adj[MAX+5];
 
-struct bimatch{
+struct bimat{
     vector<ll> mata,matb,lv;
     void make(ll n){
         mata=vector<ll>(n+5,0);
@@ -67,7 +67,7 @@ struct bimatch{
     }
 };
 
-bimatch hopcroft;
+bimat hopcroft;
 
 int main(){
     ios_base::sync_with_stdio(0);
