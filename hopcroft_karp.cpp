@@ -75,6 +75,6 @@ int main(){
             adj[i].pb(sn);
         }
     }
-    cout<<hopcroft()<<'\n';
+    cout<<hopcroft();
     return 0;
 }
