@@ -14,7 +14,7 @@ const ll MOD=1e9+7;
 const ll LOG=20;
 
 void tc(){
-
+    
 }
 
 int main(){

@@ -20,10 +20,7 @@ struct node{
 struct seg{
     ll sz;
     vector<node> v;
-    void make(ll n){
-        sz=n;
-        v.eb();
-    }
+    seg(ll n):sz(n),v(vector<node>(1)){}
     void mkch(ll vi){
         if(!v[vi].li){
             v[vi].li=v.size();
@@ -56,15 +53,12 @@ struct seg{
     }
 };
 
-ll n;
-seg tree;
-
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    ll q,m,k,a,b,c;
+    ll n,q,m,k,a,b,c;
     cin>>n>>m>>k;
-    tree.make(n);
+    seg tree(n);
     FOR(i,1,n){
         cin>>a;
         tree.updt(i,a);

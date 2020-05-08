@@ -9,15 +9,19 @@ using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
 const ll INF=1e18;
-const ll MAX=400;
+const ll MAX=200;
 const ll MOD=1e9+7;
 const ll LOG=20;
 
 ll n,m;
-vector<pll> adj[MAX+5];
+ll cost[MAX+5][MAX+5];
+ll cap[MAX+5][MAX+5];
 
 struct MCMF{
+    ll n;
+    ll flow[MAX+5][MAX+5]={};
     vector<ll> lv;
+    void make(ll ver){n=ver;}
     bool bfs(){
         lv=vector<ll>(n+5,0);
         lv[n+1]=1;
@@ -48,14 +52,9 @@ int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     cin>>n>>m;
-    FOR(i,1,n){
-        ll cnt;
-        cin>>cnt;
-        while(cnt--){
-            ll a,b;
-            cin>>a>>b;
-            adj[n].eb(b,a);
-        }
-    }
+    mcmf.make(n+m);
+    FOR(i,1,n) cin>>cap[n+m+1][i];
+    FOR(i,1,m) cin>>cap[n+i][n+m+2];
+    FOR(i,1,n) FOR(j,n,2*n) cin>>cost[i][j];
     return 0;
 }

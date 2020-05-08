@@ -13,9 +13,7 @@ const ll MAX=1e6;
 
 struct cor{
     vector<ll> v;
-    void make(ll n,ll* x){
-        v.resize(n);
-        FOR(i,1,n) v[i-1]=x[i];
+    void make(){
         sort(ALL(v));
         v.erase(unique(ALL(v)),v.end());
     }
@@ -29,8 +27,11 @@ int main(){
     ll x[MAX+5];
     cor xc;
     cin>>n;
-    FOR(i,1,n) cin>>x[i];
-    xc.make(n,x);
+    FOR(i,1,n){
+        cin>>x[i];
+        xc.v.pb(x[i]);
+    }
+    xc.make();
     FOR(i,1,n) cout<<xc[x[i]]<<' ';
     return 0;
 }

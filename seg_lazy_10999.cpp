@@ -20,7 +20,7 @@ struct node{
 struct seg{
     ll base;
     vector<node> v;
-    void make(ll n, ll* arr=NULL){
+    seg(ll n, ll* arr=NULL){
         base=1;
         while(base<n) base<<=1;
         v.resize(base<<1);
@@ -68,7 +68,6 @@ struct seg{
 
 ll n;
 ll arr[MAX+5];
-seg tree;
 
 int main(){
     ios_base::sync_with_stdio(0);
@@ -77,7 +76,7 @@ int main(){
     cin>>n>>m>>k;
     q=m+k;
     FOR(i,1,n) cin>>arr[i];
-    tree.make(n,arr);
+    seg tree(n,arr);
     while(q--){
         cin>>a;
         if(a==1){

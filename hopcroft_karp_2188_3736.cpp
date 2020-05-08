@@ -9,36 +9,36 @@ using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
 const ll INF=1e18;
-const ll MAX=200;
+const ll MAX=1e4;
 const ll MOD=1e9+7;
 const ll LOG=20;
 
-ll n,m;
-vector<ll> adj[MAX+5];
-
 struct bimat{
+    ll n,m;
+    vector<vector<ll>> adj;
     vector<ll> mata,matb,lv;
-    void make(ll n,ll m){
-        mata=vector<ll>(n+5,0);
-        matb=vector<ll>(m+5,0);
-    }
+    bimat(ll n,ll m):n(n),m(m),
+    adj(vector<vector<ll>>(n+5)),
+    mata(vector<ll>(n+5)),
+    matb(vector<ll>(m+5))
+    {}
     void hop_bfs(){
-        lv=vector<ll>(n+5,0);
-        ll q[MAX+5];
-        ll s=0,e=0;
+        lv=vector<ll>(n+5);
+        queue<ll> q;
         FOR(i,1,n){
             if(!mata[i]){
                 lv[i]=1;
-                q[e++]=i;
+                q.push(i);
             }
         }
-        while(s<e){
-            ll top=q[s++];
+        while(!q.empty()){
+            ll top=q.front();
+            q.pop();
             for(ll nxt:adj[top]){
                 nxt=matb[nxt];
                 if(nxt && !lv[nxt]){
                     lv[nxt]=lv[top]+1;
-                    q[e++]=nxt;
+                    q.push(nxt);
                 }
             }
         }
@@ -66,22 +66,24 @@ struct bimat{
         return ret;
     }
 };
-bimat hopcroft;
 
-int main(){
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cin>>n>>m;
-    hopcroft.make(n,m);
+ll n;
+void tc(){
+    bimat hop(n,n);
+    ll j,s,a;
     FOR(i,1,n){
-        ll s;
-        cin>>s;
+        scanf("%lld: (%lld)",&j,&s);
         while(s--){
-            ll sn;
-            cin>>sn;
-            adj[i].pb(sn);
+            scanf("%lld",&a);
+            hop.adj[j+1].pb(a-n+1);
         }
     }
-    cout<<hopcroft();
+    printf("%lld\n",hop());
+}
+
+int main(){
+    // ios_base::sync_with_stdio(0);
+    // cin.tie(0);
+    while(scanf("%lld",&n)>0) tc();
     return 0;
 }

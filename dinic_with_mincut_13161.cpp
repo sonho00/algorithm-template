@@ -13,15 +13,13 @@ const ll MAX=500;
 const ll MOD=1e9+7;
 const ll LOG=20;
 
-ll n;
-ll cap[MAX+5][MAX+5];
-
 struct maxfl{
+    ll n;
     vector<ll> side,work,lv;
-    ll flow[MAX+5][MAX+5]={};
-    void make(ll n){
-        side=vector<ll>(n+5,0);
-    }
+    vector<vector<ll>> cap,flow;
+    maxfl(ll n):n(n),
+    cap(vector<vector<ll>>(n+5,vector<ll>(n+5))),
+    flow(vector<vector<ll>>(n+5,vector<ll>(n+5,0))){}
     bool bfs(){
         lv=vector<ll>(n+5,0);
         ll q[MAX+5];
@@ -39,7 +37,8 @@ struct maxfl{
         }
         return lv[n+2];
     }
-    ll dfs(ll idx=n+1,ll f=INF){
+    ll dfs(){return dfs(n+1,INF);}
+    ll dfs(ll idx,ll f){
         if(idx==n+2) return f;
         ll ret=0,rest;
         for(ll& i=work[idx]; i<=n+2; ++i){
@@ -61,43 +60,42 @@ struct maxfl{
         return ret;
     }
     void cut(){
+        side=vector<ll>(n+5,0);
+        side[n+1]=1;
         ll q[MAX+5];
         ll s=0,e=0;
         q[e++]=n+1;
-        bool visit[MAX+5]={};
-        visit[n+1]=1;
         while(s<e){
             ll top=q[s++];
             FOR(i,1,n+2){
-                if(!visit[i] && flow[top][i]<cap[top][i]){
-                    visit[i]=1;
-                    q[e++]=i;
+                if(!side[i] && flow[top][i]<cap[top][i]){
                     side[i]=1;
+                    q[e++]=i;
                 }
             }
         }
     }
 };
 
-maxfl dinic;
-
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+    ll n;
     cin>>n;
-    dinic.make(n);
+    maxfl dinic(n);
     FOR(i,1,n){
-        cin>>dinic.side[i];
-        switch(dinic.side[i]){
+        ll s;
+        cin>>s;
+        switch(s){
         case 1:
-            cap[n+1][i]=INF;
+            dinic.cap[n+1][i]=INF;
             break;
         case 2:
-            cap[i][n+2]=INF;
+            dinic.cap[i][n+2]=INF;
             break;
         }
     }
-    FOR(i,1,n) FOR(j,1,n) cin>>cap[i][j];
+    FOR(i,1,n) FOR(j,1,n) cin>>dinic.cap[i][j];
     cout<<dinic()<<'\n';
     dinic.cut();
     FOR(i,1,n) if(dinic.side[i]==1) cout<<i<<' ';
