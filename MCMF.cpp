@@ -16,7 +16,10 @@ const ll LOG=20;
 ll n,m;
 vector<pll> adj[MAX+5];
 
-struct 
+struct MCMF{
+    
+};
+MCMF mcmf;
 
 int main(){
     ios_base::sync_with_stdio(0);

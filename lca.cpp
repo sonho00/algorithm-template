@@ -9,27 +9,25 @@ using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
 const ll INF=1e18;
-const ll MAX=1e5;
+const ll MAX=4e4;
 const ll MOD=1e9+7;
-const ll LOG=20;
+const ll LOG=16;
 
 ll n,m;
 vector<pll> adj[MAX+5];
 
 struct LCA{
-    ll lv[MAX+5];
+    ll lv[MAX+5]={};
     pll anc[MAX+5][LOG+5];
     void bfs(ll idx){
         queue<ll> q;
-        vector<bool> visit(n+5,0);
-        lv[idx]=visit[idx]=1;
+        lv[idx]=1;
         q.push(idx);
         while(!q.empty()){
             ll top=q.front();
             q.pop();
             for(pll& p:adj[top]){
-                if(visit[p.se]) continue;
-                visit[p.se]=1;
+                if(lv[p.se]) continue;
                 lv[p.se]=lv[top]+1;
                 anc[p.se][0]={p.fi,top};
                 q.push(p.se);
