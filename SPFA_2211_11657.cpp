@@ -21,9 +21,9 @@ struct graph{
     bool spfa(ll idx){
         dist=vector<ll>(n+5,INF);
         dist[idx]=0;
-        par=vector<ll>(n+5,0);
-        vector<bool> inq(n+5,0);
-        vector<ll> cnt(n+5,0);
+        par=vector<ll>(n+5);
+        vector<bool> inq(n+5);
+        vector<ll> cnt(n+5);
         inq[idx]=1;
         queue<ll> q;
         q.push(idx);

@@ -21,7 +21,7 @@ struct graph{
     void dijk(ll idx){
         dist=vector<ll>(n+5,INF);
         dist[idx]=0;
-        par=vector<ll>(n+5,0);
+        par=vector<ll>(n+5);
         priority_queue<pll> pq;
         pq.emplace(0,idx);
         ll d,top;
