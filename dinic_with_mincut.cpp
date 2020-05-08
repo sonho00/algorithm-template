@@ -22,7 +22,7 @@ struct maxfl{
     void make(ll n){
         side=vector<ll>(n+5,0);
     }
-    bool dinic_bfs(){
+    bool bfs(){
         lv=vector<ll>(n+5,0);
         ll q[MAX+5];
         ll s=0,e=0;
@@ -39,12 +39,12 @@ struct maxfl{
         }
         return lv[n+2];
     }
-    ll dinic_dfs(ll idx=n+1,ll f=INF){
+    ll dfs(ll idx=n+1,ll f=INF){
         if(idx==n+2) return f;
         ll ret=0,rest;
         for(ll& i=work[idx]; i<=n+2; ++i){
             rest=cap[idx][i]-flow[idx][i];
-            if(lv[i]==lv[idx]+1 && rest && (ret=dinic_dfs(i,min(f,rest)))){
+            if(lv[i]==lv[idx]+1 && rest && (ret=dfs(i,min(f,rest)))){
                 flow[idx][i]+=ret;
                 flow[i][idx]-=ret;
                 return ret;
@@ -54,9 +54,9 @@ struct maxfl{
     }
     ll operator()(){
         ll ret=0,d;
-        while(dinic_bfs()){
+        while(bfs()){
             work=vector<ll>(n+5,1);
-            while(d=dinic_dfs()) ret+=d;
+            while(d=dfs()) ret+=d;
         }
         return ret;
     }

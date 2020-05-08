@@ -22,13 +22,12 @@ struct cor{
     ll operator[](ll val){return lower_bound(ALL(v),val)-v.begin();}
 };
 
-ll n;
-ll x[MAX+5];
-cor xc;
-
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+    ll n;
+    ll x[MAX+5];
+    cor xc;
     cin>>n;
     FOR(i,1,n) cin>>x[i];
     xc.make(n,x);
