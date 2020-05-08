@@ -13,29 +13,25 @@ const ll MAX=1e6;
 
 struct cor{
     vector<ll> v;
-    void make(){
+    void make(ll n,ll* x){
+        v.resize(n);
+        FOR(i,1,n) v[i-1]=x[i];
         sort(ALL(v));
         v.erase(unique(ALL(v)),v.end());
     }
-    ll operator[](ll val){
-        return lower_bound(ALL(v),val)-v.begin();
-    }
+    ll operator[](ll val){return lower_bound(ALL(v),val)-v.begin();}
 };
 
 ll n;
-cor xc;
 ll x[MAX+5];
+cor xc;
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    
     cin>>n;
-    FOR(i,1,n){
-        cin>>x[i];
-        xc.v.pb(x[i]);
-    }
-    xc.make();
+    FOR(i,1,n) cin>>x[i];
+    xc.make(n,x);
     FOR(i,1,n) cout<<xc[x[i]]<<' ';
     return 0;
 }

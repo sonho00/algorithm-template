@@ -18,7 +18,7 @@ struct node{
     }
 };
 struct seg{
-    static ll sz;
+    ll sz;
     vector<node> v;
     void make(ll n){
         sz=n;
@@ -34,24 +34,27 @@ struct seg{
             v.eb();
         }
     }
-    void updt(ll idx,ll val,ll s=1,ll e=sz,ll vi=0){
+    void updt(ll idx,ll val){updt(idx,val,1,sz,0);}
+    void updt(ll idx,ll val,ll s,ll e,ll vi){
         if(e<idx || idx<s) return;
         v[vi].val=val;
         if(s==e) return;
         mkch(vi);
-        updt(idx,val,s,(s+e)/2,v[vi].li);
-        updt(idx,val,(s+e)/2+1,e,v[vi].ri);
+        ll m=s+e>>1;
+        updt(idx,val,s,m,v[vi].li);
+        updt(idx,val,m+1,e,v[vi].ri);
         v[vi].updt(v[v[vi].li],v[v[vi].ri]);
     }
-    ll query(ll l,ll r,ll s=1,ll e=sz,ll vi=0){
+    ll query(ll l,ll r){return query(l,r,1,sz,0);}
+    ll query(ll l,ll r,ll s,ll e,ll vi){
         if(r<s || e<l) return 0;
         if(l<=s && e<=r) return v[vi].val;
-        ll lval=query(l,r,s,(s+e)/2,v[vi].li);
-        ll rval=query(l,r,(s+e)/2+1,e,v[vi].ri);
+        ll m=s+e>>1;
+        ll lval=query(l,r,s,m,v[vi].li);
+        ll rval=query(l,r,m+1,e,v[vi].ri);
         return lval+rval;
     }
 };
-ll seg::sz=0;
 
 ll n;
 seg tree;

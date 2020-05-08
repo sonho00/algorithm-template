@@ -66,7 +66,6 @@ struct bimat{
         return ret;
     }
 };
-
 bimat hopcroft;
 
 int main(){
