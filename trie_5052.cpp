@@ -17,17 +17,17 @@ struct node{
     ll cnt;
     bool end;
     vector<ll> idx;
-    node(ll n):cnt(0),end(0),idx(vector<ll>(n)){} 
+    node():cnt(0),end(0),idx(vector<ll>(10)){}
+    ll& operator[](ll x){return idx[x-'0'];}
 };
 struct TRIE{
-    ll n,def;
     vector<node> v;
-    TRIE(ll n,ll def):n(n),def(def),v(vector<node>(1,n)){}
-    ll find(string& s){
+    TRIE():v(vector<node>(1)){}
+    bool find(string& s){
         ll sz=s.size()-1;
         ll vi=0;
         FOR(i,0,sz){
-            ll nxt=v[vi].idx[s[i]-def];
+            ll nxt=v[vi][s[i]];
             if(nxt) vi=nxt;
             else return 0;
         }
@@ -38,10 +38,10 @@ struct TRIE{
         ll vi=0;
         ++v[0].cnt;
         FOR(i,0,sz){
-            ll nxt=v[vi].idx[s[i]-def];
+            ll nxt=v[vi][s[i]];
             if(!nxt){
-                nxt=v[vi].idx[s[i]-def]=v.size();
-                v.eb(n);
+                nxt=v[vi][s[i]]=v.size();
+                v.eb();
             }
             vi=nxt;
             ++v[vi].cnt;
@@ -51,7 +51,7 @@ struct TRIE{
 };
 
 void tc(){
-    TRIE trie(10,'0');
+    TRIE trie;
     ll n;
     cin>>n;
     string str[n+5];
