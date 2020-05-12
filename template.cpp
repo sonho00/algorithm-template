@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 #define FOR(i,a,b) for(ll i=a; i<=b; ++i)
 #define ALL(x) x.begin(),x.end()
+#define vecl vector<ll>
 #define pb push_back
 #define eb emplace_back
 #define fi first
