@@ -24,7 +24,8 @@ int main(){
     ll t;
     cin>>t;
     FOR(i,1,t){
-        // cout<<"Case #"<<i<<": "<<'\n';
+        // cout<<"Case #"<<i<<": ";
+        // cout<<'\n';
         tc();
         // cout<<'\n';
     }
