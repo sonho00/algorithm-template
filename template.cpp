@@ -2,6 +2,7 @@
 #define FOR(i,a,b) for(ll i=a; i<=b; ++i)
 #define ALL(x) x.begin(),x.end()
 #define vl vector<ll>
+#define vp vector<pll>
 #define pb push_back
 #define eb emplace_back
 #define fi first
