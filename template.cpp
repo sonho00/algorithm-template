@@ -1,8 +1,6 @@
 #include<bits/stdc++.h>
 #define FOR(i,a,b) for(ll i=a; i<=b; ++i)
 #define ALL(x) x.begin(),x.end()
-#define vl vector<ll>
-#define vp vector<pll>
 #define pb push_back
 #define eb emplace_back
 #define fi first
@@ -10,6 +8,8 @@
 using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
+using vl=vector<ll>;
+using vp=vector<pll>;
 const ll INF=1e18;
 const ll MAX=1e5;
 const ll MOD=1e9+7;
