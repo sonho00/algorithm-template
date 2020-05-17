@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include<bits/stdc++.h>
 #define FOR(i,a,b) for(ll i=a; i<=b; ++i)
 #define ALL(x) x.begin(),x.end()
