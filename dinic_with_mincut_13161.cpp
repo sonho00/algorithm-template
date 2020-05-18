@@ -19,7 +19,8 @@ const ll MOD=1e9+7;
 
 struct maxfl{
     ll n;
-    vl side,work,lv;
+    vl work,lv;
+    vector<bool> side;
     vector<vl> cap,flow;
     maxfl(ll n):n(n),
     cap(vector<vl>(n+5,vl(n+5))),
@@ -67,7 +68,7 @@ struct maxfl{
         return ret;
     }
     void cut(){
-        side=vl(n+5);
+        side=vector<bool>(n+5);
         side[n+1]=1;
         queue<ll> q;
         q.push(n+1);
@@ -105,9 +106,9 @@ int main(){
     FOR(i,1,n) FOR(j,1,n) cin>>dinic.cap[i][j];
     cout<<dinic()<<endl;
     dinic.cut();
-    FOR(i,1,n) if(dinic.side[i]==1) cout<<i<<' ';
+    FOR(i,1,n) if(dinic.side[i]) cout<<i<<' ';
     cout<<endl;
-    FOR(i,1,n) if(dinic.side[i]!=1) cout<<i<<' ';
+    FOR(i,1,n) if(!dinic.side[i]) cout<<i<<' ';
     cout<<endl;
     return 0;
 }
