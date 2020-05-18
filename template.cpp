@@ -7,6 +7,7 @@
 #define eb emplace_back
 #define fi first
 #define se second
+#define endl '\n'
 using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
