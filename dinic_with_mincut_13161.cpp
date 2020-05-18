@@ -18,18 +18,21 @@ const ll MAX=1e5;
 const ll MOD=1e9+7;
 
 struct maxfl{
-    ll n;
+    ll n,src,sink;
     vl work,lv;
     vector<bool> side;
     vector<vl> cap,flow;
-    maxfl(ll n):n(n),
+    maxfl(ll n):n(n),src(n+1),sink(n+2),
+    cap(vector<vl>(n+5,vl(n+5))),
+    flow(vector<vl>(n+5,vl(n+5))){}
+    maxfl(ll n,ll src,ll sink):n(n),src(src),sink(sink),
     cap(vector<vl>(n+5,vl(n+5))),
     flow(vector<vl>(n+5,vl(n+5))){}
     bool bfs(){
         lv=vl(n+5);
         queue<ll> q;
-        q.push(n+1);
-        lv[n+1]=1;
+        q.push(src);
+        lv[src]=1;
         while(!q.empty()){
             ll top=q.front();
             q.pop();
@@ -40,11 +43,11 @@ struct maxfl{
                 }
             }
         }
-        return lv[n+2];
+        return lv[sink];
     }
-    ll dfs(){return dfs(n+1,INF);}
+    ll dfs(){return dfs(src,INF);}
     ll dfs(ll idx,ll f){
-        if(idx==n+2) return f;
+        if(idx==sink) return f;
         ll ret=0,rest;
         for(ll& i=work[idx]; i<=n+2; ++i){
             rest=cap[idx][i]-flow[idx][i];
@@ -71,7 +74,7 @@ struct maxfl{
         side=vector<bool>(n+5);
         side[n+1]=1;
         queue<ll> q;
-        q.push(n+1);
+        q.push(src);
         while(!q.empty()){
             ll top=q.front();
             q.pop();
