@@ -28,9 +28,9 @@ int main(){
     cin>>t;
     FOR(i,1,t){
         // cout<<"Case #"<<i<<": ";
-        // cout<<'\n';
+        // cout<<endl;
         tc();
-        // cout<<'\n';
+        // cout<<endl;
     }
     return 0;
 }
