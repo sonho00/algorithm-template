@@ -1,8 +1,6 @@
-#define _USE_MATH_DEFINES
 #include<bits/stdc++.h>
 #define FOR(i,a,b) for(ll i=a; i<=b; ++i)
 #define ALL(x) x.begin(),x.end()
-#define gcd __gcd
 #define pb push_back
 #define eb emplace_back
 #define fi first
@@ -15,7 +13,6 @@ using vl=vector<ll>;
 using vp=vector<pll>;
 const ll INF=1e18;
 const ll MAX=1e5;
-const ll MOD=1e9+7;
 
 void tc(){
     
