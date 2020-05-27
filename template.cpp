@@ -12,7 +12,6 @@ using pll=pair<ll,ll>;
 using vl=vector<ll>;
 using vp=vector<pll>;
 const ll INF=1e18;
-const ll MAX=1e5;
 
 void tc(){
     
