@@ -15,16 +15,17 @@ const ll INF=1e18;
 
 struct MCMF{
     ll n,src,sink;
-    vector<vl> cap,cost,flow;
+    vector<vl> cap,flow;
+    vector<vp> adj;
     MCMF(ll n):n(n),src(n+1),sink(n+2),
     cap(vector<vl>(n+5,vl(n+5))),
-    cost(vector<vl>(n+5,vl(n+5))),
-    flow(vector<vl>(n+5,vl(n+5)))
+    flow(vector<vl>(n+5,vl(n+5))),
+    adj(vector<vp>(n+5))
     {}
     MCMF(ll n,ll src,ll sink):n(n),src(src),sink(sink),
     cap(vector<vl>(n+5,vl(n+5))),
-    cost(vector<vl>(n+5,vl(n+5))),
-    flow(vector<vl>(n+5,vl(n+5)))
+    flow(vector<vl>(n+5,vl(n+5))),
+    adj(vector<vp>(n+5))
     {}
     pll spfa(){
         vl dist(n+5,INF);
@@ -38,21 +39,23 @@ struct MCMF{
             ll top=q.front();
             q.pop();
             inq[top]=0;
-            FOR(i,1,n+2){
-                if(flow[top][i]<cap[top][i]){
-                    ll d=dist[top]+cost[top][i];
-                    if(dist[i]>d){
-                        dist[i]=d;
-                        par[i]=top;
-                        if(!inq[i]){
-                            inq[i]=1;
-                            q.push(i);
+            for(pll& p:adj[top]){
+                ll a,b;
+                tie(a,b)=p;
+                if(flow[top][b]<cap[top][b]){
+                    ll d=dist[top]+a;
+                    if(dist[b]>d){
+                        dist[b]=d;
+                        par[b]=top;
+                        if(!inq[b]){
+                            inq[b]=1;
+                            q.push(b);
                         }
                     }
                 }
             }
         }
-        if(dist[sink]==INF) return pll(0,0);
+        if(!par[sink]) return pll(0,0);
         ll f=INF,v=sink,p;
         while(v!=src){
             p=par[v];
@@ -80,8 +83,8 @@ struct MCMF{
     }
     void addEdge(ll a,ll b,ll capa,ll cst){
         cap[a][b]=capa;
-        cost[a][b]=cst;
-        cost[b][a]=-cst;
+        adj[a].eb(cst,b);
+        adj[b].eb(-cst,a);
     }
 };
 
