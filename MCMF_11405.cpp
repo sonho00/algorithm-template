@@ -5,31 +5,35 @@
 #define eb emplace_back
 #define fi first
 #define se second
+#define endl '\n'
 using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
+using vl=vector<ll>;
+using vp=vector<pll>;
 const ll INF=1e18;
-const ll MAX=1e5;
-const ll MOD=1e9+7;
-const ll LOG=20;
 
 struct MCMF{
-    ll n;
-    vector<vector<ll>> cap,cost,flow;
-    vector<ll> lv;
-    MCMF(ll n):n(n),
-    cap(vector<vector<ll>>(n+5,vector<ll>(n+5))),
-    cost(vector<vector<ll>>(n+5,vector<ll>(n+5))),
-    flow(vector<vector<ll>>(n+5,vector<ll>(n+5)))
+    ll n,src,sink;
+    vector<vl> cap,cost,flow;
+    MCMF(ll n):n(n),src(n+1),sink(n+2),
+    cap(vector<vl>(n+5,vl(n+5))),
+    cost(vector<vl>(n+5,vl(n+5))),
+    flow(vector<vl>(n+5,vl(n+5)))
+    {}
+    MCMF(ll n,ll src,ll sink):n(n),src(src),sink(sink),
+    cap(vector<vl>(n+5,vl(n+5))),
+    cost(vector<vl>(n+5,vl(n+5))),
+    flow(vector<vl>(n+5,vl(n+5)))
     {}
     pll spfa(){
-        vector<ll> dist(n+5,INF);
-        dist[n+1]=0;
-        vector<ll> par(n+5);
+        vl dist(n+5,INF);
+        dist[src]=0;
+        vl par(n+5);
         vector<bool> inq(n+5);
-        inq[n+1]=1;
+        inq[src]=1;
         queue<ll> q;
-        q.push(n+1);
+        q.push(src);
         while(!q.empty()){
             ll top=q.front();
             q.pop();
@@ -48,21 +52,21 @@ struct MCMF{
                 }
             }
         }
-        if(dist[n+2]==INF) return pll(0,0);
-        ll f=INF,v=n+2,p;
-        while(v!=n+1){
+        if(dist[sink]==INF) return pll(0,0);
+        ll f=INF,v=sink,p;
+        while(v!=src){
             p=par[v];
             f=min(f,cap[p][v]-flow[p][v]);
             v=p;
         }
-        v=n+2;
-        while(v!=n+1){
+        v=sink;
+        while(v!=src){
             p=par[v];
             flow[p][v]+=f;
             flow[v][p]-=f;
             v=p;
         }
-        return pll(f*dist[n+2],f);
+        return pll(f*dist[sink],f);
     }
     pll operator()(){
         pll ret,tmp;
@@ -82,8 +86,8 @@ int main(){
     ll n,m,v,a;
     cin>>n>>m;
     MCMF mcmf(n+m);
-    FOR(i,1,n) cin>>mcmf.cap[mcmf.n+1][i];
-    FOR(i,n+1,n+m) cin>>mcmf.cap[i][mcmf.n+2];
+    FOR(i,1,n) cin>>mcmf.cap[mcmf.src][i];
+    FOR(i,n+1,n+m) cin>>mcmf.cap[i][mcmf.sink];
     FOR(j,n+1,n+m) FOR(i,1,n){
         cin>>mcmf.cost[i][j];
         mcmf.cost[j][i]=-mcmf.cost[i][j];
