@@ -1,8 +1,6 @@
-#define _USE_MATH_DEFINES
 #include<bits/stdc++.h>
 #define FOR(i,a,b) for(ll i=a; i<=b; ++i)
 #define ALL(x) x.begin(),x.end()
-#define gcd __gcd
 #define pb push_back
 #define eb emplace_back
 #define fi first
@@ -14,8 +12,6 @@ using pll=pair<ll,ll>;
 using vl=vector<ll>;
 using vp=vector<pll>;
 const ll INF=1e18;
-const ll MAX=1e5;
-const ll MOD=1e9+7;
 
 struct bimat{
     ll n,m;
@@ -23,7 +19,8 @@ struct bimat{
     vector<vl> adj;
     bimat(ll n,ll m):n(n),m(m),
     mata(vl(n+5)),matb(vl(m+5)),
-    adj(vector<vl>(n+5)){}
+    adj(vector<vl>(n+5))
+    {}
     void bfs(){
         lv=vl(n+5);
         queue<ll> q;
