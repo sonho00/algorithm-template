@@ -78,6 +78,11 @@ struct MCMF{
         }
         return ret;
     }
+    void addEdge(ll a,ll b,ll capa,ll cst){
+        cap[a][b]=capa;
+        cost[a][b]=cst;
+        cost[b][a]=-cst;
+    }
 };
 
 int main(){
@@ -86,12 +91,20 @@ int main(){
     ll n,m,v,a;
     cin>>n>>m;
     MCMF mcmf(n+m);
-    FOR(i,1,n) cin>>mcmf.cap[mcmf.src][i];
-    FOR(i,n+1,n+m) cin>>mcmf.cap[i][mcmf.sink];
+    FOR(i,1,n){
+        ll k;
+        cin>>k;
+        mcmf.addEdge(mcmf.src,i,k,0);
+    }
+    FOR(i,n+1,n+m){
+        ll k;
+        cin>>k;
+        mcmf.addEdge(i,mcmf.sink,k,0);
+    }
     FOR(j,n+1,n+m) FOR(i,1,n){
-        cin>>mcmf.cost[i][j];
-        mcmf.cost[j][i]=-mcmf.cost[i][j];
-        mcmf.cap[i][j]=INF;
+        ll k;
+        cin>>k;
+        mcmf.addEdge(i,j,INF,k);
     }
     cout<<mcmf().fi;
     return 0;
