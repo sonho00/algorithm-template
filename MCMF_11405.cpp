@@ -72,10 +72,10 @@ struct MCMF{
         return pll(f*dist[sink],f);
     }
     pll operator()(){
-        pll ret,tmp;
+        pll ret;
         while(1){
-            tmp=spfa();
-            if(!tmp.fi) break;
+            pll tmp=spfa();
+            if(!tmp.se) break;
             ret.fi+=tmp.fi;
             ret.se+=tmp.se;
         }
