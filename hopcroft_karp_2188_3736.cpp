@@ -15,7 +15,7 @@ const ll INF=1e18;
 
 struct bimat{
     ll n,m;
-    vl mata,matb,lv;
+    vl mata,matb,lv,work;
     vector<vl> adj;
     bimat(ll n,ll m):n(n),m(m),
     mata(vl(n+5)),matb(vl(m+5)),
@@ -43,11 +43,13 @@ struct bimat{
         }
     }
     bool dfs(ll idx){
-        for(ll i:adj[idx]){
-            ll nxt=matb[i];
+        ll sz=adj[idx].size();
+        for(ll& i=work[idx]; i<sz; ++i){
+            ll v=adj[idx][i];
+            ll nxt=matb[v];
             if(!nxt || lv[nxt]==lv[idx]+1 && dfs(nxt)){
-                matb[i]=idx;
-                mata[idx]=i;
+                matb[v]=idx;
+                mata[idx]=v;
                 return true;
             }
         }
@@ -57,6 +59,7 @@ struct bimat{
         ll ret=0;
         while(1){
             bfs();
+            work=vl(n+5);
             ll cnt=0;
             FOR(i,1,n) if(!mata[i] && dfs(i)) ++cnt;
             if(cnt) ret+=cnt;
