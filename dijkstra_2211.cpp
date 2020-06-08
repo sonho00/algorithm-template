@@ -5,36 +5,37 @@
 #define eb emplace_back
 #define fi first
 #define se second
+#define endl '\n'
 using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
+using vl=vector<ll>;
+using vp=vector<pll>;
 const ll INF=1e18;
-const ll MAX=1e5;
-const ll MOD=1e9+7;
-const ll LOG=20;
 
 struct graph{
     ll n;
-    vector<vector<pll>> adj;
-    vector<ll> dist,par;
-    graph(ll n):n(n),adj(vector<vector<pll>>(n+5)){}
+    vector<vp> adj;
+    vl dist,par;
+    graph(ll n):n(n),adj(vector<vp>(n+5)){}
     void dijk(ll idx){
-        dist=vector<ll>(n+5,INF);
+        dist=vl(n+5,INF);
         dist[idx]=0;
-        par=vector<ll>(n+5);
-        priority_queue<pll> pq;
+        par=vl(n+5);
+        priority_queue<pll,vp,greater<pll>> pq;
         pq.emplace(0,idx);
-        ll d,top;
+        ll a,b,c,d;
         while(!pq.empty()){
-            tie(d,top)=pq.top();
+            tie(a,b)=pq.top();
             pq.pop();
-            if(dist[top]!=-d) continue;
-            for(pll& p:adj[top]){
-                d=dist[top]+p.fi;
-                if(dist[p.se]>d){
-                    dist[p.se]=d;
-                    par[p.se]=top;
-                    pq.emplace(-d,p.se);
+            if(dist[b]!=a) continue;
+            for(pll& p:adj[b]){
+                tie(c,d)=p;
+                c+=a;
+                if(dist[d]>c){
+                    dist[d]=c;
+                    par[d]=b;
+                    pq.emplace(c,d);
                 }
             }
         }
@@ -54,7 +55,7 @@ int main(){
         G.adj[b].eb(c,a);
     }
     G.dijk(1);
-    cout<<n-1<<'\n';
-    FOR(i,2,n) cout<<i<<' '<<G.par[i]<<'\n';
+    cout<<n-1<<endl;
+    FOR(i,2,n) cout<<i<<' '<<G.par[i]<<endl;
     return 0;
 }

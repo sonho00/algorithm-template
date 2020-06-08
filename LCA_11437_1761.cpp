@@ -5,13 +5,13 @@
 #define eb emplace_back
 #define fi first
 #define se second
+#define endl '\n'
 using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
+using vl=vector<ll>;
+using vp=vector<pll>;
 const ll INF=1e18;
-const ll MAX=1e5;
-const ll MOD=1e9+7;
-const ll LOG=20;
 
 ll lb(ll x){
     ll ret=-1;
@@ -23,12 +23,12 @@ ll lb(ll x){
 }
 struct graph{
     ll n,log;
-    vector<vector<pll>> adj,anc;
-    vector<ll> lv;
-    graph(ll n):n(n),log(lb(n)),adj(vector<vector<pll>>(n+5)){}
+    vector<vp> adj,anc;
+    vl lv;
+    graph(ll n):n(n),log(lb(n)),adj(vector<vp>(n+5)){}
     void bfs(ll idx){
-        anc=vector<vector<pll>>(n+5,vector<pll>(log+5));
-        lv=vector<ll>(n+5,0);
+        anc=vector<vp>(n+5,vp(log+5));
+        lv=vl(n+5);
         lv[idx]=1;
         queue<ll> q;
         q.push(idx);
@@ -48,7 +48,7 @@ struct graph{
             anc[i][j]={a+anc[b][j-1].fi,anc[b][j-1].se};
         }
     }
-    void updt(pll& ret,ll& a,ll i){
+    void goai(pll& ret,ll& a,ll i){
         pll& p=anc[a][i];
         ret.fi+=p.fi;
         ret.se=a=p.se;
@@ -59,21 +59,22 @@ struct graph{
         for(ll diff=lv[b]-lv[a],i=0; diff; ++i){
             if(diff&1<<i){
                 diff^=1<<i;
-                updt(ret,b,i);
+                goai(ret,b,i);
             }
         }
         if(a==b) return ret;
         for(ll i=log; i>=0; --i){
             if(anc[a][i].se!=anc[b][i].se){
-                updt(ret,a,i);
-                updt(ret,b,i);
+                goai(ret,a,i);
+                goai(ret,b,i);
             }
         }
-        updt(ret,a,0);
-        updt(ret,b,0);
+        goai(ret,a,0);
+        goai(ret,b,0);
         return ret;
     }
 };
+
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
@@ -89,7 +90,7 @@ int main(){
     cin>>n;
     while(n--){
         cin>>a>>b;
-        cout<<G.lca(a,b).fi<<'\n';
+        cout<<G.lca(a,b).fi<<endl;
     }
     return 0;
 }
