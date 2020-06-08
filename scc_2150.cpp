@@ -18,7 +18,7 @@ ll v,e;
 vl adj[MAXV+5];
 ll dfn[MAXV+5];
 ll low[MAXV+5];
-bool fin[MAXV+5];
+ll sccn[MAXV+5];
 ll dfsn;
 vector<vl> scc;
 stack<ll> st;
@@ -28,16 +28,17 @@ void dfs(ll i){
     low[i]=dfn[i]=++dfsn;
     for(ll nxt:adj[i]){
         if(!dfn[nxt]) dfs(nxt);
-        if(!fin[nxt] && low[i]>low[nxt]){
+        if(sccn[nxt]==-1 && low[i]>low[nxt]){
             low[i]=low[nxt];
         }
     }
     if(low[i]==dfn[i]){
+        ll sz=scc.size();
         scc.eb();
         ll tmp;
         do{
             tmp=st.top();
-            fin[tmp]=1;
+            sccn[tmp]=sz;
             st.pop();
             scc.back().pb(tmp);
         } while(tmp!=i);
@@ -54,13 +55,14 @@ int main(){
         cin>>a>>b;
         adj[a].pb(b);
     }
+    memset(sccn,-1,sizeof(sccn));
     FOR(i,1,v) if(!dfn[i]) dfs(i);
     sort(ALL(scc),[](vl& a,vl& b){
         return a.front()<b.front();
     });
     cout<<scc.size()<<endl;
     for(vl& v:scc){
-        for(ll i:v) cout<<i<<endl;
+        for(ll i:v) cout<<i<<' ';
         cout<<"-1\n";
     }
     return 0;
