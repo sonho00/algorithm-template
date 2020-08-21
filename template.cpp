@@ -14,7 +14,7 @@ using vp=vector<pll>;
 const ll INF=1e18;
 
 void tc(){
-    
+
 }
 
 int main(){
@@ -23,7 +23,8 @@ int main(){
     ll t;
     cin>>t;
     FOR(i,1,t){
-        // cout<<"Case #"<<i<<": ";
+        // cout<<"Case #"<<i;
+        // cout<<":";
         // cout<<endl;
         tc();
         // cout<<endl;
