@@ -27,7 +27,7 @@ int main(){
         // cout<<":";
         // cout<<endl;
         tc();
-        // cout<<endl;
+        cout<<endl;
     }
     return 0;
 }
