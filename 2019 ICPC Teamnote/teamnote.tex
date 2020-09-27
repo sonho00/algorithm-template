@@ -1,0 +1,410 @@
+%to using two column
+\iffalse %need to be deleted for using
+\documentclass[10pt,landscape,a4paper,twocolumn]{article}
+
+\setlength{\columnsep}{20pt}
+
+\usepackage[utf8]{inputenc}
+\usepackage[left=1.0cm, right=1.0cm, top=1.5cm, bottom=1.0cm, headsep=0.4cm]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{kotex}
+\usepackage{color}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{SungKyunKwan University - Matt Watle}
+\fancyhead[R]{\thepage}
+\cfoot{}
+
+\definecolor{darkblue}{RGB}{0,0,139}
+\definecolor{darkgreen}{RGB}{22,119,67}
+\definecolor{dkgrey}{RGB}{127,127,127}
+\definecolor{orange}{RGB}{231,128,58}
+
+\lstset
+{
+    basicstyle=\footnotesize\ttfamily,
+    breaklines=true,
+    breakindent=1.1em,
+    numbers=left,
+    numberstyle=\footnotesize\ttfamily\color{dkgrey},
+    numbersep=5pt,
+    frame=lines
+}
+
+\lstdefinestyle{mycpp}
+{
+    language=[GNU]C++,
+    keywordstyle=\color{darkblue},
+    commentstyle=\itshape\color{darkgreen},
+    stringstyle=\color{orange},
+    showspaces=false,
+    showstringspaces=false
+}
+\fi %need to be deleted for using
+%to using two column
+
+%using one column
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{kotex}
+\usepackage{color}
+\usepackage{hyperref}
+%https://www.overleaf.com/project/5bf64fd5e3b6f55847173161https://www.overleaf.com/project/5bf64fd5e3b6f55847173161
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{SungKyunKwan University - Matt Watle}
+\fancyhead[R]{\thepage}
+\cfoot{}
+
+\definecolor{darkblue}{RGB}{0,0,139}
+\definecolor{darkgreen}{RGB}{22,119,67}
+\definecolor{dkgrey}{RGB}{127,127,127}
+\definecolor{orange}{RGB}{231,128,58}
+
+\lstset
+{
+    basicstyle=\footnotesize\ttfamily,
+    breaklines=true,
+    breakindent=1.1em,
+    numbers=left,
+    numberstyle=\footnotesize\ttfamily\color{dkgrey},
+    numbersep=5pt,
+    frame=lines
+}
+
+\lstdefinestyle{mycpp}
+{
+    language=[GNU]C++,
+    keywordstyle=\color{darkblue},
+    commentstyle=\itshape\color{darkgreen},
+    stringstyle=\color{orange},
+    showspaces=false,
+    showstringspaces=false
+}
+
+\hypersetup
+{
+    colorlinks=true,
+    linktoc=all,
+    linkcolor=black,
+}
+%using one column
+
+
+\begin{document}
+
+\iffalse %added
+\title{2019 ICPC Team note}
+\author{woosol0125 }
+\date{September 2019}
+\maketitle
+\fi %added
+
+\tableofcontents
+
+
+\section{Range Queries}
+\subsection{Segment Tree with Lazy Propagation}
+시간복잡도 : 쿼리마다 $O(\log{N})$
+\lstinputlisting[style=mycpp]{src/Segment_Tree_with_Lazy_Propagation.cpp}
+
+\subsection{Persistent Segment Tree}
+시간복잡도\\
+setup : $O(N)$ \hspace{1em}
+그 이외의 연산 : $O(\log{N})$
+\lstinputlisting[style=mycpp]{src/Persistent_Segment_Tree.cpp}
+%\mbox{}\\
+
+
+\section{Dynamic Programming}
+\subsection{Convex Hull Optimization}
+$dp[i]=\min{(dp[j]+a[i]b[j])} \hspace{1em} (j<i, b[i-1]\ge{b[i]})$\\
+$dp[i]=\max{(dp[j]+a[i]b[j])} \hspace{1em} (j<i, b[i-1]\le{b[i]})$\\
+위의 두 형태의 점화식을 기울기가 $b[j]$, $y$절편이 $dp[j]$인 직선 $j$에 대하여 $x=a[i]$의 함수값의 최소/최대를 찾는 것으로 해석하여 최적화하는 기법, 위의 꼴로 점화식을 변환하되, 직선의 $x$자리에 모든 변수를 묶어서 정리하면 기울기와 $y$절편을 결정하는데 유용하다.\\
+\subsubsection{Convex Hull Trick}
+\lstinputlisting[style=mycpp]{src/Convex_Hull_Optimization.cpp}
+시간복잡도 : $O(N)$ \\
+
+\subsubsection{Li-Chao Tree}
+시간복잡도 : $O(NlogX)$ \\
+최댓값 Li-Chao Tree, 최솟값은 직선 삽입/값 찾을 때 부호를 반대로 넣으면 된다. LiChaoTree T; T.init(최소$x$좌표, 최대$x$좌표); T.insert(0,$\{$기울기,$y$절편$\}$); T.get(0,$x$좌표);
+\lstinputlisting[style=mycpp]{src/LiChao_Tree.cpp}
+
+\subsection{Knuth Optimization}
+1. $dp[i][j]=min(dp[i][k]+dp[k+1][j])+cost[i][j]$ \hspace{1em} $(i\le k < j)$\\
+2. $cost[b][c]\le cost[a][d]$ \hspace{1em} $(a\le b\le c\le d)$ \hspace{1em} $\Leftarrow$ Monotonicity (단조성)\\
+3. $cost[a][c]+cost[b][d]\le cost[a][d]+cost[b][c]$ \hspace{1em} $(a\le b\le c\le d)$ \hspace{1em} $\Leftarrow$ Quadrangle Inequality (사각 부등식)\\
+1, 2, 3이 성립할 때, 다음이 성립한다.\\
+$pos[i][j-1]\le pos[i][j]\le pos[i+1][j]$ \hspace{1em} ($pos[i][j]=dp[i][j]$를 최소화 하는 $k$의 위치)\\
+따라서 $k$의 위치를 $1\sim N$까지 순회할 필요없이 위의 부등식 범위만 고려하여 순회함으로써 시간복잡도를 $O(N^3)$에서 $O(N^2)$으로 줄일 수 있다.\\
+2015년도 인터넷 예선 F번 Merging Files
+\lstinputlisting[style=mycpp]{src/Knuth_Optimization.cpp}
+
+%\subsection{Divide \& Conquer Optimization}
+%\subsection{Bit-masking}
+\subsection{Lowest Common Ancestor}
+\lstinputlisting[style=mycpp]{src/LCA.cpp}
+
+\subsection{Berlekamp-Massey}
+\lstinputlisting[style=mycpp]{src/Berlekamp_Massey.cpp}
+
+%\mbox{}\\
+
+
+\section{Divide \& Conquer}
+\subsection{Repeated matrix squaring}
+시간복잡도 : $O(D^3\log{N})$ \hspace{1em} ($D=$행렬크기)
+\lstinputlisting[style=mycpp]{src/Repeated_matrix_squaring.cpp}
+%\mbox{}\\
+
+
+\section{Graph}
+\subsection{Dijkstra}
+시간복잡도 : $O(E\log{V})$
+\lstinputlisting[style=mycpp]{src/Dijkstra.cpp}
+
+%\subsection{Bellman Ford}
+%\subsection{Topological Sort}
+\subsection{Strongly Connected Component}
+시간복잡도 : $O(N)$
+\lstinputlisting[style=mycpp]{src/Strongly_Connected_Component.cpp}
+
+\subsection{2-SAT}
+시간복잡도 : $O(N)$\\
+2-SAT에 사용되는 CNF(Conjunctive Normal Form)\\
+$f=(A \lor B)\land(B \lor C)\land(\lnot C \lor \lnot D)$\\
+위와 같이 하나의 closure에는 최대 2개의 변수 또는 NOT변수들의 OR 연산으로 이루어져 있으며, 각각의 closure는 AND연산을 통해 연결되어 있다. 실제 문제는 위와 같은 형태로 처음부터 나타낼 수는 없으며 아래의 법칙 등을 사용하거나 벤다이어그램을 그려봄으로써 2-SAT에 올바른 CNF를 찾아내야 한다. CNF를 찾아냈다면 이제는 OR 연산을 바탕으로 그래프의 Edge를 만들어야 한다. $A \lor B$ 가 주어지면 $\lnot A \rightarrow B$ 와 $\lnot B \rightarrow A$를 모두 추가하는 것을 잊지 말자.\\
+\\
+CNF(Conjunctive Normal Form)를 만들 때 사용되는 법칙\\
+$\lor$ 는 덧셈으로, $\land$ 는 곱셈으로 생각하면 산수에 적용되는 교환/결합/분배 법칙과 동일하게 연산할 수 있다.\\\\
+1. 교환 법칙\\
+$f=A \land B = B \land A$\\
+$f=A \lor B = B \lor A$\\
+2. 결합 법칙\\
+$f=(A \lor B)\lor C = A \lor (B \lor C)$\\
+$f=(A \land B)\land C = A \land (B \land C)$\\
+3. 분배 법칙\\
+$f=A \land (B \lor C) = (A \land B) \lor (A \land C)$\\
+$f=A \lor (B \land C) = (A \lor B) \land (A \lor C)$\\
+4. 동일 법칙\\
+$f=A \land A = A$\\
+$f=A \lor A = A$\\
+5. 흡수 법칙\\
+$f=A \lor (A \land B) = A$\\
+$f=A \land (A \lor B) = A$\\
+6. 드모르간 법칙\\
+$f=\lnot (A \land B) = \lnot A \lor \lnot B$\\
+7. 알아두면 좋은 식\\
+$f=(A \land B) \lor (A \land C) = A \land (B \lor C) = (A \lor A) \land (B \lor C)$ \hspace{1em} 분배법칙의 첫번째는 거꾸로 생각하자.\\
+$f=(A \land B) \lor (B \land C) \lor (C \land A) = (A \lor B) \land (B \lor C) \land (C \lor A)$ \hspace{1em} 2018 Seoul Regional 기출\\
+$f=(A \land B) \lor (C \land D) = (A \lor C) \land (A \lor D) \land (B \lor C) \land (B \lor D)$\\
+\lstinputlisting[style=mycpp]{src/2-SAT.cpp}
+
+\subsection{Finding Diameter of Tree}
+시간복잡도 : $O(V+E)$
+\lstinputlisting[style=mycpp]{src/Finding_Diameter_of_Tree.cpp}
+%\mbox{}\\
+
+
+\section{Network Flow}
+\subsection{Dinic}
+시간복잡도 : $O(V^2E)$
+\lstinputlisting[style=mycpp]{src/Dinic.cpp}
+
+\subsection{Max-flow min-cut Theorem}
+\hspace{1em}같은 컴포넌트에 존재하는 임의의 두 정점 $u$와 $v$를 서로 다른 컴포넌트로 분리하기위해 제거해야 하는 간선의 가중치 값의 합의 최솟값은 $u$와 $v$를 각각 source와 sink로 하는 유량그래프에서 최대유량과 같다. 따라서 적절하게 유량그래프를 만든 뒤 Edmonds Karp나 Dinic을 사용하여 최대 유량을 구하면 된다.\\
+
+\subsection{Konig's Theorem}
+\hspace{1em}이분 그래프에서의 Minimum Vertex Cover는 Maximum Bipartite Matching과 같으며 실제 조건을 만족하는 정점 집합은 다음과 같다. 이분 그래프 상의 왼쪽 정점 집합을 $L$, 오른쪽 정점 집합을 $R$이라고 하자. 이때 다음과 같은 집합 $X$를 정의한다. $X=\{L$에 매칭되지 않은 정점들과, 그 정점으로부터 alternating path를 통해 도달할 수 있는 $L, R$의 모든 정점$\}$ 이렇게 세개의 집합을 정의하면 우리가 구하고자 하는 Vertex Cover집합 $C$는 다음과 같다. $C=(L-X)\cup{(R\cap{X})}$\\
+
+%\subsection{Bipartite Matching}
+%시간복잡도 : $O(VE)$
+%\lstinputlisting[style=mycpp]{src/Bipartite_Matching.cpp}
+
+\subsection{Hopcroft-Karp}
+시간복잡도 : $O(E\sqrt{V})$
+\lstinputlisting[style=mycpp]{src/Hopcroft_Karp.cpp}
+
+\subsection{Minimum Cost Maximum Flow (SPFA)}
+시간복잡도 : $O(VEf)$ \hspace{1em} ($f=$최대 유량, 플로우 그래프 특성 상 실제로는 $O(VEf)$ 보다는 빠르게 작동)\\
+\hspace{1em}$u$에서 $v$로 가는 간선의 cost가 $w$면 역방향 간선의 cost는 $-w$이다.
+\lstinputlisting[style=mycpp]{src/MCMF(matrix_ver).cpp}
+
+
+%\subsubsection{Adjacency Matrix Version}
+%\lstinputlisting[style=mycpp]{src/MCMF(matrix_ver).cpp}
+%\subsubsection{Adjacency List Version}
+%\lstinputlisting[style=mycpp]{src/MCMF(list_ver).cpp}
+%\mbox{}\\
+
+
+\section{Graph Modeling Method}
+\subsection{L-R maxflow}
+\hspace{1em}L-R max flow는 Flow Graph 중 각 edge의 유량에 대한 하한선과 상한선이 존재하는 경우에 대한 최대 유량을 찾는 방법이다. 모델링 방법은 기존의 Flow Graph에서 새로운 Source와 새로운 Sink를 추가하는 것이다. 새로운 Source와 Sink에 edge를 연결하는 방법은 다음과 같다. 정점 v1에서 v2로 하한유량 L과 상한유량 R을 갖는 edge가 있다고 가정하자. 새로운 Source에서 v2로 연결되는 capacity L짜리 edge를 연결하고, v1에서 새로운 Sink로 capacity가 L인 edge를 새롭게 연결하면 된다. 이후 마지막으로 기존의 Sink에서 기존의 Source로 가는 capacity가 무한대인 edge를 추가한 뒤, 기존의 그래프의 edge 중 상한과 하한을 갖는 edge들의 capacity를 R-L로 수정한다. 이렇게하면 L-R flow를 구하기 위한 새로운 그래프가 완성된다. 이제 조건을 만족하는 정답이 존재하는지 판별하는 방법은 새로운 Source에서 새로운 Sink로 들어오는 유량이 $L_{tot}$인지 확인하면되고, 만약 존재성이 밝혀진다면, 현재의 Flow Graph의 상태를 유지한채 기존의 Source에서 Sink로 가는 Maximum Flow를 구하여 존재성이 밝혀졌을 때의 $f_{Sink,Source}$에 더해주면 구하고자 하는 정답이된다.
+%MCMF를 사용하는 방법과 Source와 Sink를 새롭게 추가하는 방법 2가지가 존재한다.
+
+%\subsubsection{Using MCMF}
+%\hspace{1em}각 edge에 대하여 하한선 L과 상한선 R이 존재한다고 하자, 그럼 각 edge를 다음과 같이 2개의 edge로 만들면 된다. capacity가 L이고 cost가 -1인 edge와, capacity가 R-L이고 cost가 0인 edge를 연결하도록 한다. 이후 조건을 만족하는 답이 존재하는지 확인하는 것은 최종 결과물의 rcost가 $-L_{tot}$인지 확인하고, 맞다면 rflow가 구하고자 하는 정답이다.
+%\subsubsection{Adding New Source and Sink}
+%\hspace{1em}두번째 방법은 기존의 Flow Graph에서 새로운 Source와 새로운 Sink를 추가하는 것이다. 새로운 Source와 Sink에 edge를 연결하는 방법은 다음과 같다. 정점 v1에서 v2로 하한유량 L과 상한유량 R을 갖는 edge가 있다고 가정하자. 새로운 Source에서 v2로 연결되는 capacity L짜리 edge를 연결하고, v1에서 새로운 Sink로 capacity가 L인 edge를 새롭게 연결하면 된다. 이후 마지막으로 기존의 Sink에서 기존의 Source로 가는 capacity가 무한대인 edge를 추가한 뒤, 기존의 그래프의 edge 중 상한과 하한을 갖는 edge들의 capacity를 R-L로 수정한다. 이렇게하면 L-R flow를 구하기 위한 새로운 그래프가 완성된다. 이제 조건을 만족하는 정답이 존재하는지 판별하는 방법은 마찬가지로 새로운 Sink로 들어오는 유량이 $L_{tot}$인지 확인하면되고, 만약 존재성이 밝혀진다면 기존에 만든 최초의 Flow Graph의 Maximum Flow를 구하면 구하고자 하는 원래 정답이된다.
+
+
+%\mbox{}\\
+
+
+\section{Geometry}
+\subsection{CCW}
+\lstinputlisting[style=mycpp]{src/CCW.cpp}
+
+%deleted
+\iffalse
+\subsection{Vector Class}
+\lstinputlisting[style=mycpp]{src/Vector_Class.cpp}
+\fi
+%deleted
+
+\subsection{Graham Scan}
+\lstinputlisting[style=mycpp]{src/Graham_Scan.cpp}
+%\subsection{Rotating Calipers}
+
+\subsection{Rotating Calipers}
+\lstinputlisting[style=mycpp]{src/Rotating_Calipers.cpp}
+
+%deleted
+\iffalse
+\subsection{Plane Sweeping with Segment Tree}
+시간복잡도 : $O(N\log{N})$
+\lstinputlisting[style=mycpp]{src/Plane_Sweeping_with_Segment_Tree.cpp}
+\fi
+%deleted
+
+%\mbox{}\\
+
+
+\section{Math}
+\subsection{Euler's totient function}
+$n$이하의 자연수 중 $n$과 서로소인 수의 개수를 구하는 함수
+$\phi(n)=n \prod_{p|n} {(1-{1 \over p})}$
+
+%\subsection{Lucas Theorem}
+\subsection{Fermat's little Theorem}
+$p$가 소수이고 $a$가 $p$의 배수가 아니면 $a^{p-1} \equiv 1$ \hspace{0.3em} $(mod\;p)$ 이다.\\
+즉, $a^{p-1}$를 $p$로 나눈 나머지는 1이다.
+
+\subsection{Euler's Theorem}
+$a$와 $n$이 서로소인 자연수일때 다음 합동식이 성립한다.\\
+$a^{\phi(n)}\equiv 1$ \hspace{0.3em} $(mod\;n)$\\
+
+\subsection{Chinese Remainder Theorem}
+$x \equiv a_1 \pmod{n_1}$, $x \equiv a_2 \pmod{n_2}$, ... , $x \equiv a_k \pmod{n_k}$ 이고 $n_1, n_2, ... , n_k$는 pair-wise 서로소 관계일 때, 다음과 같은 $x$가 유일하게 존재한다.\\
+
+\begin{large}
+$x \equiv \sum_{i=1}^k {a_i\times{\left( {N \over n_i} \right)}^{\phi(n_i)}} \pmod{N}$ \hspace{1em} $\left( N = \prod_{i=1}^k {n_i} \right)$
+\end{large}
+
+
+\subsection{Landau's Theorem}
+$n$개의 팀이 토너먼트 경기를 할 때, 각 팀이 승리한 횟수를 오름차순으로 정렬한 결과를 $(s_1,s_2, ... , s_n)$ 라고 하면 $(s_1,s_2, ... , s_n)$ 이 유효하기 위한 필요충분조건은 다음과 같다.\\
+\newline
+1.\hspace{1em}$0 \le s_1 \le s_2 \le ... \le s_n$\\
+2.\hspace{1em}$s_1+s_2+ ...+s_i \ge {i \choose 2}$ \hspace{1em}$(i=1,2,...,n-1)$\\
+3.\hspace{1em}$s_1+s_2+ ...+s_n = {n \choose 2}$\\
+
+\subsection{Fibonacci Sequence}
+$
+\begin{pmatrix}
+    F_{n+1} & F_n \\
+    F_n & F_{n-1}
+\end{pmatrix}
+$
+=
+$
+\begin{pmatrix}
+    1 & 1 \\
+    1 & 0
+\end{pmatrix}^n
+$\\
+
+
+$\sum_{i=1}^n F_i=F_{n+2}-1$
+\hspace{10em}
+$\sum_{i=1}^n F_{2i}=F_{2n+1}-1$\\
+
+$\sum_{i=1}^n F_{2i-1}=F_{2n}$
+\hspace{11em}
+$\sum_{i=1}^n F_i^2=F_nF_{n+1}$\\
+
+$gcd(F_n,F_m)=F_{gcd(n,m)}$\\
+
+$F_{2n-1}=F_n^2+F_{n-1}^2$
+\hspace{10em}
+$F_{2n}=(F_{n-1}+F_{n+1})F_n=(2F_{n-1}+F_n)F_n$\\
+
+\subsection{Extended Euclidean Algorithm}
+\lstinputlisting[style=mycpp]{src/Extended_Euclidean_Algorithm.cpp}
+
+\subsection{Finding Modular inverse in $O(N)$}
+\lstinputlisting[style=mycpp]{src/Finding_Modular_Inverse.cpp}
+
+\subsection{Fast Fourier Transform}
+시간복잡도 : $O(N\log{N})$
+\lstinputlisting[style=mycpp]{src/Fast_Fourier_Transform.cpp}
+
+%deleted
+\iffalse
+\subsection{Numeric Fast Fourier Transform}
+시간복잡도 : $O(N\log{N})$
+\lstinputlisting[style=mycpp]{src/Numeric_Fast_Fourier_Transform.cpp}
+\fi
+%deleted
+
+%\mbox{}\\
+
+
+\section{String}
+\subsection{KMP}
+시간복잡도 : $O(N+M)$
+\lstinputlisting[style=mycpp]{src/KMP.cpp}
+
+%\subsection{Suffix Array}
+%\subsection{Aho-Corasik}
+
+\subsection{Trie}
+\lstinputlisting[style=mycpp]{src/Trie.cpp}
+%\subsection{Manacher's Algorithm}
+%\mbox{}\\
+
+\section{Tree Decomposition Method}
+\subsection{Heavy Light Decomposition}
+\lstinputlisting[style=mycpp]{src/Heavy_Light_Decomposition.cpp}
+
+\subsection{Centroid Decomposition}
+\lstinputlisting[style=mycpp]{src/Centroid_Decomposition.cpp}
+
+%delted
+\iffalse
+\section{Etcetera}
+
+\subsection{Minimum Vertex Cover}
+\subsection{Cut Vertex}
+\subsection{Cut Edge}
+\subsection{Hungarian Method}
+\subsection{Line Sweeping}
+\subsection{Parametric Search}
+%\mbox{}\\
+\fi
+%deleted
+
+\end{document}
