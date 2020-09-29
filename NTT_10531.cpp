@@ -1,14 +1,7 @@
-/*
-Numeric FFT
-P == MOD == A*2^B + 1
-R  A  B  P
-5  3  30 3221225473
-3  17 27 2281701377
-31 15 27 2013265921
-3  7  26 469762049
-3 119 23 998244353
-*/
+#include<bits/stdc++.h>
+using namespace std;
 using ll=long long;
+
 const ll A = 7, B = 26, P = A << B | 1, R = 3;
 const ll SZ = 20, N = 1<<20;
 ll Pow(ll x, ll y) {
@@ -51,4 +44,32 @@ void FFT(ll *a, bool f) {
         j = Pow(N, P - 2);
         for (i = 0; i < N; i++) a[i] = a[i] * j % P;
     }
+}
+
+ll a[N];
+ll c[N];
+ll b[N];
+
+int main() {
+    ll i, n;
+    cin>>n;
+    for (i = 0; i < n; i++){
+        ll x;
+        cin>>x;
+        a[x]=c[x]=1;
+    }
+    FFT(c, false);
+    for (i = 0; i < N; i++){
+        b[i]=c[i]*c[i]%P;
+    }
+    FFT(b, true);
+    cin>>n;
+    ll cnt=0;
+    while(n--){
+        ll x;
+        cin>>x;
+        if(a[x]||b[x]) ++cnt;
+    }
+    cout<<cnt;
+    return 0;
 }
