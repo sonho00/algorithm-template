@@ -2,7 +2,6 @@
 
 using namespace std;
 typedef complex<double> base;
-const double PI=3.14159265358979323846;
 
 void FFT(vector<base> &a, bool invert)
 {
@@ -13,15 +12,15 @@ void FFT(vector<base> &a, bool invert)
         j+=bit;
         if(i<j) swap(a[i],a[j]);
     }
-    for(int len=2 ; len<=N ; len<<=1){
-        double ang=2*PI/len*(invert ? -1 : 1);
+    double ang=M_PI*(invert ? -1 : 1);
+    for(int len=2 ; len<=N ; len<<=1,ang/=2){
         base wlen(cos(ang),sin(ang));
         for(int i=0 ; i<N ; i+=len){
             base w(1);
             for(int j=0 ; j<len/2 ; j++){
-                base u=a[i+j], v=a[i+j+len/2]*w;
-                a[i+j]=u+v;
-                a[i+j+len/2]=u-v;
+                base u=a[i|j], v=a[i|j|len/2]*w;
+                a[i|j]=u+v;
+                a[i|j|len/2]=u-v;
                 w*=wlen;
             }
         }
@@ -36,7 +35,7 @@ void multiply(const vector<int> &a, const vector<int> &b, vector<int> &res)
     vector<base> fa(a.begin(),a.end());
     vector<base> fb(b.begin(),b.end());
     int N=1, na=a.size(), nb=b.size();
-    while(N<max(na,nb)) N<<=1;
+    while(N<na+nb) N<<=1;
     fa.resize(N), fb.resize(N);
     FFT(fa,false), FFT(fb,false);
     for(int i=0 ; i<N ; i++) fa[i]*=fb[i];
