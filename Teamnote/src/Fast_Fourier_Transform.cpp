@@ -1,32 +1,32 @@
 #include<bits/stdc++.h>
 
 using namespace std;
-typedef complex<double> base;
 
+typedef complex<double> base;
 void FFT(vector<base> &a, bool invert)
 {
     int N=a.size();
-    for(int i=1, j=0 ; i<N ; i++){
+    for(int i=1,j=0; i<N; i++){
         int bit=N>>1;
         for(; j>=bit ; bit>>=1) j-=bit;
         j+=bit;
         if(i<j) swap(a[i],a[j]);
     }
-    double ang=M_PI*(invert ? -1 : 1);
-    for(int len=2 ; len<=N ; len<<=1,ang/=2){
+    double ang=invert?-M_PI:M_PI;
+    for(int len=2; len<=N; len<<=1,ang/=2){
         base wlen(cos(ang),sin(ang));
-        for(int i=0 ; i<N ; i+=len){
+        for(int i=0; i<N; i+=len){
             base w(1);
-            for(int j=0 ; j<len/2 ; j++){
-                base u=a[i|j], v=a[i|j|len/2]*w;
+            for(int j=0; j<len>>1; j++){
+                base u=a[i|j], v=a[i|j|len>>1]*w;
                 a[i|j]=u+v;
-                a[i|j|len/2]=u-v;
+                a[i|j|len>>1]=u-v;
                 w*=wlen;
             }
         }
     }
     if(invert)
-        for(int i=0 ; i<N ; i++) a[i]/=N;
+        for(base& x:a) x/=N;
 }
 //when result of A(x)*B(x) is needed, resize a and b by na+nb-1 before using function
 //size of both a and b is equal to length of equation A(x) and B(x)
