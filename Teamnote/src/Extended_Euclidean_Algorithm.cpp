@@ -1,11 +1,14 @@
 #include<bits/stdc++.h>
-
 using namespace std;
+using ll=long long;
 
-tuple<int, int, int> extended_euclidean(int a, int b) {
-    if (b == 0)
-        return make_tuple(a, 1, 0);
-    int g, x, y;
-    tie(g, x, y) = extended_euclidean(b, a%b);
-    return make_tuple(g, y, x-(a/b)*y);
+vector<ll> ext_euc(ll a,ll b){
+    vector<ll> ret={1,0,a};
+    vector<ll> tmp={0,1,b};
+    while(tmp[2]){
+        ll q=ret[2]/tmp[2];
+        ret={ret[0]-q*tmp[0],ret[1]-q*tmp[1],ret[2]-q*tmp[2]};
+        swap(ret,tmp);
+    }
+    return ret;
 }
