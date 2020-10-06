@@ -294,18 +294,11 @@ $f=(A \land B) \lor (C \land D) = (A \lor C) \land (A \lor D) \land (B \lor C) \
 
 
 \section{Math}
-\subsection{Euler's totient function}
-$n$이하의 자연수 중 $n$과 서로소인 수의 개수를 구하는 함수
-$\phi(n)=n \prod_{p|n} {(1-{1 \over p})}$
+\subsection{Extended Euclidean Algorithm}
+\lstinputlisting[style=mycpp]{src/Extended_Euclidean_Algorithm.cpp}
 
-%\subsection{Lucas Theorem}
-\subsection{Fermat's little Theorem}
-$p$가 소수이고 $a$가 $p$의 배수가 아니면 $a^{p-1} \equiv 1$ \hspace{0.3em} $(mod\;p)$ 이다.\\
-즉, $a^{p-1}$를 $p$로 나눈 나머지는 1이다.
-
-\subsection{Euler's Theorem}
-$a$와 $n$이 서로소인 자연수일때 다음 합동식이 성립한다.\\
-$a^{\phi(n)}\equiv 1$ \hspace{0.3em} $(mod\;n)$\\
+\subsection{Finding Modular inverse in $O(N)$}
+\lstinputlisting[style=mycpp]{src/Finding_Modular_Inverse.cpp}
 
 \subsection{Chinese Remainder Theorem}
 $x \equiv a_1 \pmod{n_1}$, $x \equiv a_2 \pmod{n_2}$, ... , $x \equiv a_k \pmod{n_k}$ 이고 $n_1, n_2, ... , n_k$는 pair-wise 서로소 관계일 때, 다음과 같은 $x$가 유일하게 존재한다.\\
@@ -353,12 +346,6 @@ $gcd(F_n,F_m)=F_{gcd(n,m)}$\\
 $F_{2n-1}=F_n^2+F_{n-1}^2$
 \hspace{10em}
 $F_{2n}=(F_{n-1}+F_{n+1})F_n=(2F_{n-1}+F_n)F_n$\\
-
-\subsection{Extended Euclidean Algorithm}
-\lstinputlisting[style=mycpp]{src/Extended_Euclidean_Algorithm.cpp}
-
-\subsection{Finding Modular inverse in $O(N)$}
-\lstinputlisting[style=mycpp]{src/Finding_Modular_Inverse.cpp}
 
 \subsection{Fast Fourier Transform}
 시간복잡도 : $O(N\log{N})$
