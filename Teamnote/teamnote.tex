@@ -307,14 +307,6 @@ $N = \prod_{i=1}^k {n_i}$
 \subsection{Finding Modular inverse in $O(N)$}
 \lstinputlisting[style=mycpp]{src/Finding_Modular_Inverse.cpp}
 
-\subsection{Chinese Remainder Theorem}
-$x \equiv a_1 \pmod{n_1}$, $x \equiv a_2 \pmod{n_2}$, ... , $x \equiv a_k \pmod{n_k}$ 이고 $n_1, n_2, ... , n_k$는 pair-wise 서로소 관계일 때, 다음과 같은 $x$가 유일하게 존재한다.\\
-
-\begin{large}
-$x \equiv \sum_{i=1}^k {a_i\times{\left( {N \over n_i} \right)}^{\phi(n_i)}} \pmod{N}$ \hspace{1em} $\left( N = \prod_{i=1}^k {n_i} \right)$
-\end{large}
-
-
 \subsection{Landau's Theorem}
 $n$개의 팀이 토너먼트 경기를 할 때, 각 팀이 승리한 횟수를 오름차순으로 정렬한 결과를 $(s_1,s_2, ... , s_n)$ 라고 하면 $(s_1,s_2, ... , s_n)$ 이 유효하기 위한 필요충분조건은 다음과 같다.\\
 \newline
