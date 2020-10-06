@@ -297,6 +297,13 @@ $f=(A \land B) \lor (C \land D) = (A \lor C) \land (A \lor D) \land (B \lor C) \
 \subsection{Extended Euclidean Algorithm}
 \lstinputlisting[style=mycpp]{src/Extended_Euclidean_Algorithm.cpp}
 
+\subsection{Chinese Remainder Theorem}
+$x \equiv a_1 \pmod{n_1}$, $x \equiv a_2 \pmod{n_2}$, ... , $x \equiv a_k \pmod{n_k}$ 이고 $n_1, n_2, ... , n_k$는 pair-wise 서로소 관계일 때, 위 식을 만족하는 $x$는 mod $N$에 대해 유일하게 존재한다.\\
+\begin{large}
+$N = \prod_{i=1}^k {n_i}$
+\end{large}
+\lstinputlisting[style=mycpp]{src/Chinese_Remainder_Theorem.cpp}
+
 \subsection{Finding Modular inverse in $O(N)$}
 \lstinputlisting[style=mycpp]{src/Finding_Modular_Inverse.cpp}
 
