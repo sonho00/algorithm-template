@@ -2,6 +2,12 @@
 using namespace std;
 using ll=long long;
 
+/*
+input=a,b
+output={x,y,d=gcd(a,b)}
+ax+by=d
+*/
+
 vector<ll> ext_euc(ll a,ll b){
     vector<ll> ret={1,0,a};
     vector<ll> tmp={0,1,b};

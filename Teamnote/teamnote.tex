@@ -114,7 +114,7 @@
 
 \tableofcontents
 
-
+\newpage
 \section{Range Queries}
 \subsection{Segment Tree with Lazy Propagation}
 시간복잡도 : 쿼리마다 $O(\log{N})$
@@ -230,13 +230,37 @@ $B_i=A_1 \lor A_2 \lor ... \lor A_i$의 새로운 변수를 만든다. $A_i \rig
 \hspace{1em}같은 컴포넌트에 존재하는 임의의 두 정점 $u$와 $v$를 서로 다른 컴포넌트로 분리하기위해 제거해야 하는 간선의 가중치 값의 합의 최솟값은 $u$와 $v$를 각각 source와 sink로 하는 유량그래프에서 최대유량과 같다. 따라서 적절하게 유량그래프를 만든 뒤 Edmonds Karp나 Dinic을 사용하여 최대 유량을 구하면 된다.\\
 
 \subsection{Circulation problem}
-\hspace{1em}Circulation problem은 Network flow 문제에서 정점에 수요, 간선에 하한이 추가문제이다. 정점의 수요를 demand(v)라 한다면 demand(v)=v에 들어오는 유량-v에서 나가는 유량을 나타낸다. 일반적인 flow 문제에서는 모든 점에서 demand가 0이다. 이때 모든 점에서 demand의 합이 0이 아니면 조건을 만족하는 circulation이 존재할 수 없다. Circulation problem을 푸는 방법은 소스와 싱크를 만들어 최대 유량 문제로 바꾸는 것이다. demand가 양수인 점은 소스에서 그만큼의 capacity를 갖는 간선을 추가하고 demand가 음수이면 sink로 가는 간선을 추가한다. 이때 demand가 양수인 점들의 demand의 합을 D라고 하자. 이 그래프에서 최대 유량이 D이면 조건을 만족하는 circulation이 존재한다. 간선에 하한 L이 존재하는 경우 간선의 시작점의 demand를 L만큼 감소시키고 끝점의 demand를 L만큼 증가시킨 후 간선의 capacity를 R-L로 조정하면 된다. L-R flow가 존재하는지는 새로운 소스에서 싱크로 D만큼의 유량이 흐르는지 체크하면 되고, L-R flow의 최대 유량은 그 상태에서 기존의 소스에서 싱크로 Maximum flow를 적용하면 된다.
+\hspace{1em}
+Circulation problem은 Network flow 문제에서 정점에 수요, 간선에 하한이 추가된 문제이다.
+정점의 수요를 demand(v)라 한다면 demand(v)=v에 들어오는 유량-v에서 나가는 유량을 나타낸다.
+일반적인 flow 문제에서는 모든 점에서 demand가 0이다.
+이때 모든 점에서 demand의 합이 0이 아니면 조건을 만족하는 circulation이 존재할 수 없다.
+Circulation problem을 푸는 방법은 소스와 싱크를 만들어 최대 유량 문제로 바꾸는 것이다.
+demand가 양수인 점은 소스에서 그만큼의 capacity를 갖는 간선을 추가하고 demand가 음수이면 싱크로 가는 간선을 추가한다.
+이때 demand가 양수인 점들의 demand 합을 D라고 하자.
+이 그래프에서 최대 유량이 D이면 조건을 만족하는 circulation이 존재한다.
+간선에 하한 L이 존재하는 경우 간선의 시작점의 demand를 L만큼 감소시키고 끝점의 demand를 L만큼 증가시킨 후 간선의 capacity를 R-L로 조정하면 된다.
+L-R flow가 존재하는지는 새로운 소스에서 싱크로 D만큼의 유량이 흐르는지 체크하면 되고, L-R flow의 최대 유량은 그 상태에서 기존의 소스에서 싱크로 Maximum flow를 적용하면 된다.
 
 \subsection{L-R maxflow}
-\hspace{1em}L-R max flow는 Flow Graph 중 각 edge의 유량에 대한 하한선과 상한선이 존재하는 경우에 대한 최대 유량을 찾는 방법이다. 모델링 방법은 기존의 Flow Graph에서 새로운 Source와 새로운 Sink를 추가하는 것이다. 새로운 Source와 Sink에 edge를 연결하는 방법은 다음과 같다. 정점 v1에서 v2로 하한유량 L과 상한유량 R을 갖는 edge가 있다고 가정하자. 새로운 Source에서 v2로 연결되는 capacity L짜리 edge를 연결하고, v1에서 새로운 Sink로 capacity가 L인 edge를 새롭게 연결하면 된다. 이후 마지막으로 기존의 Sink에서 기존의 Source로 가는 capacity가 무한대인 edge를 추가한 뒤, 기존의 그래프의 edge 중 상한과 하한을 갖는 edge들의 capacity를 R-L로 수정한다. 이렇게하면 L-R flow를 구하기 위한 새로운 그래프가 완성된다. 이제 조건을 만족하는 정답이 존재하는지 판별하는 방법은 새로운 Source에서 새로운 Sink로 들어오는 유량이 $L_{tot}$인지 확인하면되고, 만약 존재성이 밝혀진다면, 현재의 Flow Graph의 상태를 유지한채 기존의 Source에서 Sink로 가는 Maximum Flow를 구하여 존재성이 밝혀졌을 때의 $f_{Sink,Source}$에 더해주면 구하고자 하는 정답이된다.
+\hspace{1em}
+L-R max flow는 Flow Graph 중 각 edge의 유량에 대한 하한선과 상한선이 존재하는 경우에 대한 최대 유량을 찾는 방법이다.
+모델링 방법은 기존의 Flow Graph에서 새로운 Source와 새로운 Sink를 추가하는 것이다.
+새로운 Source와 Sink에 edge를 연결하는 방법은 다음과 같다.
+정점 v1에서 v2로 하한유량 L과 상한유량 R을 갖는 edge가 있다고 가정하자.
+새로운 Source에서 v2로 연결되는 capacity L짜리 edge를 연결하고, v1에서 새로운 Sink로 capacity가 L인 edge를 새롭게 연결하면 된다.
+이후 마지막으로 기존의 Sink에서 기존의 Source로 가는 capacity가 무한대인 edge를 추가한 뒤, 기존의 그래프의 edge 중 상한과 하한을 갖는 edge들의 capacity를 R-L로 수정한다.
+이렇게하면 L-R flow를 구하기 위한 새로운 그래프가 완성된다.
+이제 조건을 만족하는 정답이 존재하는지 판별하는 방법은 새로운 Source에서 새로운 Sink로 들어오는 유량이 $L_{tot}$인지 확인하면되고, 만약 존재성이 밝혀진다면, 현재의 Flow Graph의 상태를 유지한채 기존의 Source에서 Sink로 가는 Maximum Flow를 구하여 존재성이 밝혀졌을 때의 $f_{Sink,Source}$에 더해주면 구하고자 하는 정답이 된다.
 
 \subsection{Konig's Theorem}
-\hspace{1em}이분 그래프에서의 Minimum Vertex Cover는 Maximum Bipartite Matching과 같으며 실제 조건을 만족하는 정점 집합은 다음과 같다. 이분 그래프 상의 왼쪽 정점 집합을 $L$, 오른쪽 정점 집합을 $R$이라고 하자. 이때 다음과 같은 집합 $X$를 정의한다. $X=\{L$에 매칭되지 않은 정점들과, 그 정점으로부터 alternating path를 통해 도달할 수 있는 $L, R$의 모든 정점$\}$ 이렇게 세개의 집합을 정의하면 우리가 구하고자 하는 Vertex Cover집합 $C$는 다음과 같다. $C=(L-X)\cup{(R\cap{X})}$\\
+\hspace{1em}
+이분 그래프에서의 Minimum Vertex Cover는 Maximum Bipartite Matching과 같으며 실제 조건을 만족하는 정점 집합은 다음과 같다.
+이분 그래프 상의 왼쪽 정점 집합을 $L$, 오른쪽 정점 집합을 $R$이라고 하자.
+이때 다음과 같은 집합 $X$를 정의한다.
+$X=\{L$에 매칭되지 않은 정점들과, 그 정점으로부터 alternating path를 통해 도달할 수 있는 $L, R$의 모든 정점$\}$
+이렇게 세개의 집합을 정의하면 우리가 구하고자 하는 Vertex Cover집합 $C$는 다음과 같다.
+$C=(L-X)\cup{(R\cap{X})}$\\
 
 %\subsection{Bipartite Matching}
 %시간복잡도 : $O(VE)$
@@ -289,6 +313,9 @@ $B_i=A_1 \lor A_2 \lor ... \lor A_i$의 새로운 변수를 만든다. $A_i \rig
 
 
 \section{Math}
+\subsection{Miller-Rabin, Pollard's rho}
+\lstinputlisting[style=mycpp]{src/Miller-Rabin_Pollard's_rho.cpp}
+
 \subsection{Extended Euclidean Algorithm}
 \lstinputlisting[style=mycpp]{src/Extended_Euclidean_Algorithm.cpp}
 
@@ -357,15 +384,31 @@ $F_{2n}=(F_{n-1}+F_{n+1})F_n=(2F_{n-1}+F_n)F_n$\\
 시간복잡도 : $O(N+M)$
 \lstinputlisting[style=mycpp]{src/KMP.cpp}
 
-\subsection{Trie}
-\lstinputlisting[style=mycpp]{src/Trie.cpp}
-
-\subsection{Aho-Corasik}
+\subsection{Trie, Aho-Corasik}
 \lstinputlisting[style=mycpp]{src/aho-corasick_9250.cpp}
 
 %\subsection{Suffix Array}
 %\subsection{Manacher's Algorithm}
 %\mbox{}\\
+
+\section{Game theory}
+\subsection{Grundy number}
+Normal game은 자기 차례에 할 수 있는 행동이 없으면 패배하는 게임이다.
+앞으로의 게임은 모두 normal game이라고 가정하자.
+그런디 수는 지금 상황에서 할 수 있는 행동의 가짓수이다.
+돌을 최대 k개씩 ($k<\infty$)가져가는 님게임을 예로 들자.
+돌이 n개일 때의 상황을 그런디 수로 *n이라고 할 수 있다.
+이때 *0은 normal game의 정의에 의해 무조건 패배하는 경우이다.
+\subsection{Sprague-Grundy theorem}
+모든 행동 집합은 대응되는 어떤 그런디 수와 동등하다.\\
+그 수를 구하는 방법은 다음과 같다.
+어떤 상황에서 만들 수 있는 다음 상황의 집합을 $\{*n_1, *n_2, ..., *n_k\}$라 하자.
+m이 $n_i$에 포함되지 않는 최소의 음이 아닌 정수라고 하면 이 상황을 *m으로 나타낼 수 있다.
+\subsection{More about Grundy number}
+어떤 상황이 *0이라면 패배, 아니라면 승리한다고 하면 된다.\\
+노멀 게임이 아니라면 공집합을 *1로 두고 똑같이 그런디 수를 계산하면 된다.\\
+여러게임을 같이 할 경우 각각의 그런디 수를 xor 하면 된다.
+$*n+*m=*(n \oplus m)$
 
 %delted
 \iffalse
