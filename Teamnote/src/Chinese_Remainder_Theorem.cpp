@@ -35,61 +35,55 @@ pll crt(vector<pll> arr){
 /*
 CRT 확장
 n_i가 서로소가 아닐 때도 사용 가능
-복잡도 ~ k*sqrt(max(n_i))
+복잡도 = k*sqrt(max(n_i))
 k는 mod식 개수
 */
 pll ext_crt(vector<pll> arr){
-    vector<pll> tmp;
-    ll m=1,a=0,b=1,c;
+    ll m=1;
     for(pll& p:arr){
-        c=1;
-        while(!(p.se&1)){
-            p.se>>=1;
-            c<<=1;
-        }
-        if(b<c){
-            if((p.fi-a)%b) return {-1,-1};
-            a=p.fi;
-            b=c;
-        }
-        else{
-            if((p.fi-a)%c) return {-1,-1};
-        }
-        m=max(m,p.se);
+        ll a,b;
+        tie(a,b)=p;
+        m=max(m,b);
+        a=(a%b+b)%b;
     }
-    if(b!=1) tmp.emplace_back(a,b);
-    ll sqm=sqrt(m)+3;
-    vector<bool> visit(sqm+5);
-    for(ll i=3; i<=sqm; i+=2){
-        if(visit[i]) continue;
-        a=0,b=1;
-        for(pll& p:arr){
-            c=1;
-            while(!(p.se%i)){
+    vector<ll> prime;
+    vector<pll> tmp=arr;
+    for(ll i=2; i*i<=m; ++i){
+        m=1;
+        bool flag=0;
+        for(pll& p:tmp){
+            while(p.se%i==0){
                 p.se/=i;
-                c*=i;
+                flag=1;
             }
+            m=max(m,p.se);
+        }
+        if(flag) prime.push_back(i);
+    }
+    for(pll& p:tmp){
+        ll a=p.se;
+        if(a==1) continue;
+        for(pll& p:tmp){
+            if(a==p.se){
+                p.se=1;
+                prime.push_back(a);
+            }
+        }
+    }
+
+    tmp.clear();
+    for(ll x:prime){
+        ll a=0,b=1;
+        for(pll& p:arr){
+            ll c=1;
+            while(p.se%x==0){
+                p.se/=x;
+                c*=x;
+            }
+            if((p.fi-a)%min(b,c)) return {-1,-1};
             if(b<c){
-                if((p.fi-a)%b) return {-1,-1};
                 a=p.fi;
                 b=c;
-            }
-            else{
-                if((p.fi-a)%c) return {-1,-1};
-            }
-        }
-        if(b!=1) tmp.emplace_back(a,b);
-        for(ll j=i*i; j<=sqm; j+=i<<1){
-            visit[j]=1;
-        }
-    }
-    for(pll& p:arr){
-        tie(a,b)=p;
-        if(b==1) continue;
-        for(pll& p:arr){
-            if(p.se==b){
-                if((p.fi-a)%b) return {-1,-1};
-                p.se=1;
             }
         }
         tmp.emplace_back(a,b);

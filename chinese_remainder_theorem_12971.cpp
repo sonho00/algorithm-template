@@ -24,13 +24,6 @@ vl ext_euc(ll a,ll b){
     return ret;
 }
 
-/*
-Chinese remainder theorem
-write x=a mod n as pll{a,n}
-
-input = array of {a_i,n_i}
-output = {x,N}
-*/
 pll crt(vp arr){
     ll r=0,n=1;
     for(pll& p:arr){
@@ -41,57 +34,51 @@ pll crt(vp arr){
     return {(n+r%n)%n,n};
 }
 pll ext_crt(vp arr){
-    vp tmp;
-    ll m=1,a=0,b=1;
+    ll m=1;
     for(pll& p:arr){
-        ll c=1;
-        while(!(p.se&1)){
-            p.se>>=1;
-            c<<=1;
-        }
-        if(b<c){
-            if((p.fi-a)%b) return {-1,-1};
-            a=p.fi;
-            b=c;
-        }
-        else{
-            if((p.fi-a)%c) return {-1,-1};
-        }
-        m=max(m,p.se);
+        ll a,b;
+        tie(a,b)=p;
+        m=max(m,b);
+        a=(a%b+b)%b;
     }
-    if(b!=1) tmp.eb(a,b);
-    ll sqm=sqrt(m)+3;
-    vector<bool> visit(sqm+5);
-    for(ll i=3; i<=sqm; i+=2){
-        if(visit[i]) continue;
-        a=0,b=1;
+    vl prime;
+    vp tmp=arr;
+    for(ll i=2; i*i<=m; ++i){
+        m=1;
+        bool flag=0;
+        for(pll& p:tmp){
+            while(p.se%i==0){
+                p.se/=i;
+                flag=1;
+            }
+            m=max(m,p.se);
+        }
+        if(flag) prime.pb(i);
+    }
+    for(pll& p:tmp){
+        ll a=p.se;
+        if(a==1) continue;
+        for(pll& p:tmp){
+            if(a==p.se){
+                p.se=1;
+                prime.pb(a);
+            }
+        }
+    }
+
+    tmp.clear();
+    for(ll x:prime){
+        ll a=0,b=1;
         for(pll& p:arr){
             ll c=1;
-            while(!(p.se%i)){
-                p.se/=i;
-                c*=i;
+            while(p.se%x==0){
+                p.se/=x;
+                c*=x;
             }
+            if((p.fi-a)%min(b,c)) return {-1,-1};
             if(b<c){
-                if((p.fi-a)%b) return {-1,-1};
                 a=p.fi;
                 b=c;
-            }
-            else{
-                if((p.fi-a)%c) return {-1,-1};
-            }
-        }
-        if(b!=1) tmp.eb(a,b);
-        for(ll j=i*i; j<=sqm; j+=i<<1){
-            visit[j]=1;
-        }
-    }
-    for(pll& p:arr){
-        tie(a,b)=p;
-        if(b==1) continue;
-        for(pll& p:arr){
-            if(p.se==b){
-                if((p.fi-a)%b) return {-1,-1};
-                p.se=1;
             }
         }
         tmp.eb(a,b);
