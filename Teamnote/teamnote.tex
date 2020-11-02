@@ -296,10 +296,6 @@ $C=(L-X)\cup{(R\cap{X})}$\\
 
 \subsection{Graham Scan}
 \lstinputlisting[style=mycpp]{src/Graham_Scan.cpp}
-%\subsection{Rotating Calipers}
-
-\subsection{Rotating Calipers}
-\lstinputlisting[style=mycpp]{src/Rotating_Calipers.cpp}
 
 %deleted
 \iffalse
@@ -324,6 +320,9 @@ $x \equiv a_1 \pmod{n_1}$, $x \equiv a_2 \pmod{n_2}$, ... , $x \equiv a_k \pmod{
 \begin{large}
 $N = \prod_{i=1}^k {n_i}$
 \end{large}
+\newline
+ext crt 함수는 서로소가 아닌 경우까지 CRT를 확장해 놓은 것이다.
+서로소가 아닌 경우 각 $n_i$들을 소인수분해한 후 그 소인수들에 대해 CRT를 적용하면 된다.
 \lstinputlisting[style=mycpp]{src/Chinese_Remainder_Theorem.cpp}
 
 \subsection{Finding Modular inverse in $O(N)$}
@@ -407,7 +406,7 @@ m이 $n_i$에 포함되지 않는 최소의 음이 아닌 정수라고 하면 �
 \subsection{More about Grundy number}
 어떤 상황이 *0이라면 패배, 아니라면 승리한다고 하면 된다.\\
 노멀 게임이 아니라면 공집합을 *1로 두고 똑같이 그런디 수를 계산하면 된다.\\
-여러게임을 같이 할 경우 각각의 그런디 수를 xor 하면 된다.
+여러게임을 같이 할 경우 각각의 그런디 수를 XOR 하면 된다.
 $*n+*m=*(n \oplus m)$
 
 %delted

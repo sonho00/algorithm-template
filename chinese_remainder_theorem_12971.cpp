@@ -13,17 +13,18 @@ using vl=vector<ll>;
 using vp=vector<pll>;
 const ll INF=1e18;
 
+vl prime={2,3,5,7,11,13,17};
 vl ext_euc(ll a,ll b){
     vl ret={1,0,a};
     vl tmp={0,1,b};
     while(tmp[2]){
         ll q=ret[2]/tmp[2];
-        ret={ret[0]-q*tmp[0],ret[1]-q*tmp[1],ret[2]-q*tmp[2]};
+        FOR(i,0,2) ret[i]-=q*tmp[i];
         swap(ret,tmp);
     }
-    return ret;
+    if(ret[2]>=0) return ret;
+    else return {-ret[0],-ret[1],-ret[2]};
 }
-
 pll crt(vp arr){
     ll r=0,n=1;
     for(pll& p:arr){
@@ -34,40 +35,11 @@ pll crt(vp arr){
     return {(n+r%n)%n,n};
 }
 pll ext_crt(vp arr){
-    ll m=1;
-    for(pll& p:arr){
-        ll a,b;
-        tie(a,b)=p;
-        m=max(m,b);
-        a=(a%b+b)%b;
-    }
-    vl prime;
-    vp tmp=arr;
-    for(ll i=2; i*i<=m; ++i){
-        m=1;
-        bool flag=0;
-        for(pll& p:tmp){
-            while(p.se%i==0){
-                p.se/=i;
-                flag=1;
-            }
-            m=max(m,p.se);
-        }
-        if(flag) prime.pb(i);
-    }
-    for(pll& p:tmp){
-        ll a=p.se;
-        if(a==1) continue;
-        for(pll& p:tmp){
-            if(a==p.se){
-                p.se=1;
-                prime.pb(a);
-            }
-        }
-    }
-
-    tmp.clear();
+    vp tmp;
+    ll m=INF;
     for(ll x:prime){
+        if(x*x>m) break;
+        m=1;
         ll a=0,b=1;
         for(pll& p:arr){
             ll c=1;
@@ -79,6 +51,20 @@ pll ext_crt(vp arr){
             if(b<c){
                 a=p.fi;
                 b=c;
+            }
+            m=max(m,p.se);
+        }
+        if(b!=1) tmp.eb(a,b);
+    }
+    for(pll& p:arr){
+        ll a,b;
+        tie(a,b)=p;
+        if(b==1) continue;
+        for(pll& q:arr){
+            if(q.se==1) continue;
+            if(b==q.se){
+                if((a-q.fi)%b) return {-1,-1};
+                q.se=1;
             }
         }
         tmp.eb(a,b);
