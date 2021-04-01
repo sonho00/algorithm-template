@@ -1,68 +1,56 @@
 #include<bits/stdc++.h>
-#define FOR(i,a,b) for(ll i=a; i<=b; ++i)
-#define ALL(x) x.begin(),x.end()
-#define pb push_back
-#define eb emplace_back
-#define fi first
-#define se second
-#define endl '\n'
 using namespace std;
-using ll=long long;
-using pll=pair<ll,ll>;
-using vl=vector<ll>;
-using vp=vector<pll>;
-const ll INF=1e18;
-const ll MAXV=1e4;
 
-ll v,e;
-vl adj[MAXV+5];
-ll dfn[MAXV+5];
-ll low[MAXV+5];
-ll sccn[MAXV+5];
-ll dfsn;
-vector<vl> scc;
-stack<ll> st;
+int v,e;
+vector<int> adj[10101];
+int dfsn;
+int dfn[10101];
+stack<int> s;
+int scn[10101];
+int sccn;
 
-void dfs(ll i){
-    st.push(i);
-    low[i]=dfn[i]=++dfsn;
-    for(ll nxt:adj[i]){
-        if(!dfn[nxt]) dfs(nxt);
-        if(sccn[nxt]==-1 && low[i]>low[nxt]){
-            low[i]=low[nxt];
-        }
+int dfs(int idx){
+    int ret=dfn[idx]=++dfsn;
+    s.push(idx);
+    for(int nxt:adj[idx]){
+        if(!dfn[nxt]) ret=min(ret,dfs(nxt));
+        if(!scn[nxt]) ret=min(ret,dfn[nxt]);
     }
-    if(low[i]==dfn[i]){
-        ll sz=scc.size();
-        scc.eb();
-        ll tmp;
+    if(ret==dfn[idx]){
+        ++sccn;
+        int tmp;
         do{
-            tmp=st.top();
-            sccn[tmp]=sz;
-            st.pop();
-            scc.back().pb(tmp);
-        } while(tmp!=i);
-        sort(ALL(scc.back()));
+            tmp=s.top();
+            s.pop();
+            scn[tmp]=sccn;
+        } while(tmp!=idx);
     }
+    return ret;
 }
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+
     cin>>v>>e;
     while(e--){
-        ll a,b;
+        int a,b;
         cin>>a>>b;
-        adj[a].pb(b);
+        adj[a].push_back(b);
     }
-    memset(sccn,-1,sizeof(sccn));
-    FOR(i,1,v) if(!dfn[i]) dfs(i);
-    sort(ALL(scc),[](vl& a,vl& b){
-        return a.front()<b.front();
-    });
-    cout<<scc.size()<<endl;
-    for(vl& v:scc){
-        for(ll i:v) cout<<i<<' ';
+
+    for(int i=1; i<=v; ++i){
+        if(!dfn[i]) dfs(i);
+    }
+
+    vector<vector<int>> ans(sccn);
+    for(int i=1; i<=v; ++i){
+        ans[scn[i]-1].push_back(i);
+    }
+    sort(ans.begin(),ans.end());
+    cout<<ans.size()<<'\n';
+    for(auto& v:ans){
+        for(int x:v) cout<<x<<' ';
         cout<<"-1\n";
     }
     return 0;
