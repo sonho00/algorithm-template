@@ -7,16 +7,9 @@ template<typename T> struct PST
     vector<vertex> pst;
     int make_tree(int nx) // head == nx인 pst를 복사하여 new head를 반환
     {
-        if (nx == -1)
-        {
-            pst.push_back({-1, -1, T()});//
-            return (int)(pst.size()) - 1;
-        }
-        else
-        {
-            pst.push_back(pst[nx]);
-            return (int)(pst.size()) - 1;
-        }
+        if (nx == -1) pst.push_back({-1, -1, T()});//
+        else pst.push_back(pst[nx]);
+        return (int)(pst.size()) - 1;
     }
     void update(int nx, T* arr, int ns = L, int ne = R) // head==nx인 트리의 ns부터 ne까지 한번에 갱신 O(ne-ns)
     {
