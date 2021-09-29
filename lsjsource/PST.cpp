@@ -18,7 +18,7 @@ template<typename T> struct PST
             pst[nx].val = arr[ns];
             return;
         }
-        int mid = (ns + ne) >> 1;
+        int mid = (ns + ne) >> 1; // 나누기2가 아닌 쉬프트1로 하는걸 
         update(pst[nx].l = make_tree(pst[nx].l), arr, ns, mid);
         update(pst[nx].r = make_tree(pst[nx].r), arr, mid + 1, ne);
         pst[nx].val = pst[pst[nx].l].val + pst[pst[nx].r].val;
