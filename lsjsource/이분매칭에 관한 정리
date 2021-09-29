@@ -1,0 +1,7 @@
+Maximum Independent Set 은 Minimum Vertex Cover의 여집합.
+Minimum Path Cover: dag에서 각 노드를 in, out으로 분할하여 indeg, outdeg<=1인 것을 이용
+Anti-Chain(반사슬)이란 방향 그래프 정점 부분집합으로 반사슬 내의 어떤 두 정점도 위상이 없음을 만족해야 합니다.
+예를 들어 {a, b, c, d}가 있고 a->b, c->b, b->d의 간선으로 이루어진 그래프에서 a와 c는 서로 위상이 없기 때문에 {a, c}는 반사슬입니다. 
+{b, c}는 c->b가 존재하므로 반사슬이 아닙니다. 마찬가지로 {c, d}도 c->b->d의 패스가 정의되므로 반사슬이 아닙니다. 
+이러한 부분집합 중 가장 큰 것을 Maximum Anti-Chain이라고 합니다.
+딜워스 정리(Dilworth’s Theorem)를 보면 방향 그래프에서 Maximum Anti-Chain의 크기는 Minimum Path Cover와 같다고 증명되어 있습니다.
