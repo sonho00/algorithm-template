@@ -1,87 +1,67 @@
 #include<bits/stdc++.h>
-#define FOR(i,a,b) for(ll i=a; i<=b; ++i)
-#define ALL(x) x.begin(),x.end()
-#define pb push_back
-#define eb emplace_back
-#define fi first
-#define se second
-#define endl '\n'
 using namespace std;
-using ll=long long;
-using pll=pair<ll,ll>;
-using vl=vector<ll>;
-using vp=vector<pll>;
-const ll INF=1e18;
 
-ll n;
-struct node{
-    ll idx[26]={};
-    ll fail=0;
-    bool fin=0;
-};
-struct Trie{
+struct TRIE{
+    struct node{
+        int idx[26];
+        bool ans;
+    };
+    TRIE():v(1){}
     vector<node> v;
-    Trie(){v.eb();}
-    void insert(string& s){
-        ll vi=0;
-        ll fail=0;
-        for(char& x:s){
+    void push(string& s){
+        int vi=0;
+        for(char x:s){
             x-='a';
             if(!v[vi].idx[x]){
                 v[vi].idx[x]=v.size();
-                v.eb();
+                v.emplace_back();
             }
             vi=v[vi].idx[x];
         }
-        v[vi].fin=1;
+        v[vi].ans=1;
     }
-    void bfs(){
-        queue<ll> q;
-        q.push(0);
+    void solve(){
+        queue<pair<int,int>> q;
+        for(int x:v[0].idx){
+            if(x) q.emplace(x,0);
+        }
         while(!q.empty()){
-            ll top=q.front();
-            ll fail=v[top].fail;
-            v[top].fin|=v[fail].fin;
+            auto[vi,prv]=q.front();
             q.pop();
-            FOR(i,0,25){
-                ll nxt=v[top].idx[i];
-                if(!nxt) continue;
-                q.push(nxt);
-                fail=v[top].fail;
-                while(fail && !v[fail].idx[i]) fail=v[fail].fail;
-                fail=v[fail].idx[i];
-                if(fail!=nxt) v[nxt].fail=fail;
+            v[vi].ans|=v[prv].ans;
+            for(int i=0; i<26; ++i){
+                if(v[vi].idx[i]) q.emplace(v[vi].idx[i],v[prv].idx[i]);
+                else v[vi].idx[i]=v[prv].idx[i];
             }
         }
     }
-    bool query(string &s){
-        ll vi=0;
-        for(char& x:s){
-            x-='a';
-            while(vi && !v[vi].idx[x]) vi=v[vi].fail;
-            if(v[vi].idx[x]) vi=v[vi].idx[x];
-            if(v[vi].fin) return true;
+    bool qry(string& s){
+        int vi=0;
+        for(char x:s){
+            vi=v[vi].idx[x-'a'];
+            if(v[vi].ans) return 1;
         }
-        return false;
+        return 0;
     }
 };
 
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
+    int n;
     cin>>n;
-    Trie trie;
-    while(n--){
-        string s;
+    TRIE trie;
+    string s;
+    for(int i=0; i<n; ++i){
         cin>>s;
-        trie.insert(s);
+        trie.push(s);
     }
-    trie.bfs();
-    cin>>n;
-    while(n--){
-        string s;
+    trie.solve();
+    int q;
+    cin>>q;
+    for(int i=0; i<q; ++i){
         cin>>s;
-        cout<<(trie.query(s)?"YES":"NO")<<endl;
+        if(trie.qry(s)) cout<<"YES\n";
+        else cout<<"NO\n";
     }
-    return 0;
 }
