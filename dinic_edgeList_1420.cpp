@@ -1,65 +1,60 @@
 #include<bits/stdc++.h>
 #define FOR(i,a,b) for(ll i=a; i<=b; ++i)
-#define ALL(x) x.begin(),x.end()
-#define pb push_back
-#define eb emplace_back
-#define fi first
-#define se second
-#define endl '\n'
 using namespace std;
 using ll=long long;
 using pll=pair<ll,ll>;
 using vl=vector<ll>;
-using vp=vector<pll>;
 const ll INF=1e18;
 
-struct Edge{
-    ll nxt,des,cap,flow;
-    Edge(ll nxt,ll des,ll cap):nxt(nxt),des(des),cap(cap),flow(0){}
-};
-struct maxfl{
+struct Dinic{
+    struct Edge{
+        ll par,nxt,cap,flow;
+        Edge(ll par,ll nxt,ll cap):par(par),nxt(nxt),cap(cap),flow(0){}
+    };
     ll n,src,sink;
-    vl st,cur,lv;
+    vector<ll> st,cur,lv;
     vector<Edge> edge;
-    maxfl(ll n):n(n),src(n+1),sink(n+2),st(vl(n+5,-1)){}
-    void addEdge(ll a,ll b,ll capa){
-        edge.eb(st[a],b,capa);
+    Dinic(ll n):n(n),src(n+1),sink(n+2),st(n+5,-1){}
+    void addEdge(ll a,ll b,ll cap){
+        edge.emplace_back(st[a],b,cap);
         st[a]=edge.size()-1;
-        edge.eb(st[b],a,0);
+        edge.emplace_back(st[b],a,0);
         st[b]=edge.size()-1;
     }
     bool bfs(){
-        lv=vl(n+5);
+        lv=vector<ll>(n+5);
         lv[src]=1;
         queue<ll> q;
         q.push(src);
         while(!q.empty()){
-            ll top=q.front();
+            ll idx=q.front();
             q.pop();
-            for(ll idx=st[top]; idx!=-1; idx=edge[idx].nxt){
-                Edge& e=edge[idx];
-                if(e.flow==e.cap || lv[e.des]) continue;
-                lv[e.des]=lv[top]+1;
-                q.push(e.des);
+            for(ll i=st[idx]; i!=-1; i=edge[i].par){
+                Edge& e=edge[i];
+                if(!lv[e.nxt] && e.flow<e.cap){
+                    lv[e.nxt]=lv[idx]+1;
+                    q.push(e.nxt);
+                }
             }
         }
         return lv[sink];
     }
-    ll dfs(ll v,ll f){
-        if(v==sink) return f;
-        for(ll& idx=cur[v]; idx!=-1; idx=edge[idx].nxt){
-            Edge& e=edge[idx];
-            if(e.flow==e.cap || lv[e.des]!=lv[v]+1) continue;
-            ll tmp=dfs(e.des,min(f,e.cap-e.flow));
-            if(tmp){
-                e.flow+=tmp;
-                edge[idx^1].flow-=tmp;
-                return tmp;
+    ll dfs(ll idx,ll flow){
+        if(idx==sink) return flow;
+        for(ll& i=cur[idx]; i!=-1; i=edge[i].par){
+            Edge& e=edge[i];
+            if(e.flow<e.cap && lv[e.nxt]==lv[idx]+1){
+                ll tmp=dfs(e.nxt,min(flow,e.cap-e.flow));
+                if(tmp){
+                    e.flow+=tmp;
+                    edge[i^1].flow-=tmp;
+                    return tmp;
+                }
             }
         }
         return 0;
     }
-    ll operator()(){
+    ll solve(){
         ll ret=0;
         while(bfs()){
             cur=st;
@@ -85,7 +80,7 @@ int main(){
     FOR(i,1,n) FOR(j,1,m){
         if(g[i][j]!='#') num[i][j]=++cnt;
     }
-    maxfl dinic(cnt<<1);
+    Dinic dinic(cnt<<1);
     FOR(i,1,n) FOR(j,1,m){
         switch(g[i][j]){
             case '#':
@@ -108,7 +103,7 @@ int main(){
             }
         }
     }
-    ll ans=dinic();
+    ll ans=dinic.solve();
     cout<<(ans<=n*m?ans:-1);
     return 0;
 }
